@@ -1,8 +1,10 @@
 package com.example.idm.data;
 
+import com.example.idm.LogoutActivity;
 import com.example.idm.data.model.LoggedInUser;
 
 import java.io.IOException;
+import java.sql.SQLInvalidAuthorizationSpecException;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -25,5 +27,6 @@ public class LoginDataSource {
 
     public void logout() {
         // TODO: revoke authentication
+
     }
 }
