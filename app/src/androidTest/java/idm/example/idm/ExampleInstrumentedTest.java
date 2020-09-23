@@ -1,4 +1,4 @@
-package com.example.idm;
+package idm.example.idm;
 
 import android.content.Context;
 
