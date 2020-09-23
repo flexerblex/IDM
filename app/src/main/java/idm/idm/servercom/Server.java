@@ -80,9 +80,7 @@ public class Server {
         {
             System.out.println(exc.getMessage());
         }
-
     }
-
 
     public URLConnection openConnection() throws IOException {
         throw new RuntimeException("Stub");

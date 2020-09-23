@@ -59,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
         //if server authenticates user/password
         String test = userName;
 
-
         Server.SERVER.login(userName, userPass);
 
         Log.d("next test", "Server established.");
