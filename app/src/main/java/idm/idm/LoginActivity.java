@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
+
+import idm.idm.servercom.Server;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText Name;
@@ -34,7 +38,11 @@ public class LoginActivity extends AppCompatActivity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validID(Name.getText().toString(), Password.getText().toString());
+                try {
+                    validID(Name.getText().toString(), Password.getText().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -47,12 +55,17 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-    private void validID(String userName, String userPass) {
+
+    private void validID(String userName, String userPass) throws IOException {
         //if server authenticates user/password
         String test = userName;
+
+        Server.SERVER.loginTask(userName, userPass);
+
         Intent toHome = new Intent (LoginActivity.this, HomeActivity.class);
         toHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(toHome);
     }
+
 
 }
