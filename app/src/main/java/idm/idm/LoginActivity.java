@@ -2,6 +2,7 @@ package idm.idm;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -34,17 +35,15 @@ public class LoginActivity extends AppCompatActivity {
         Login = (Button)findViewById(R.id.loginButton);
         Create = (TextView) findViewById(R.id.createAccount);
 
-
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    validID(Name.getText().toString(), Password.getText().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                validIDTest(Name.getText().toString(), Password.getText().toString());
+
+                System.out.println("reached 1");
             }
         });
+
 
         Create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,11 +55,14 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void validID(String userName, String userPass) throws IOException {
+    private void validIDTest(String userName, String userPass) {
         //if server authenticates user/password
         String test = userName;
 
-        Server.SERVER.loginTask(userName, userPass);
+
+        Server.SERVER.login(userName, userPass);
+
+        Log.d("next test", "Server established.");
 
         Intent toHome = new Intent (LoginActivity.this, HomeActivity.class);
         toHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
