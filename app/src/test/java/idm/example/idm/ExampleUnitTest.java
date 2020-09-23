@@ -1,4 +1,4 @@
-package com.example.idm;
+package idm.example.idm;
 
 import org.junit.Test;
 

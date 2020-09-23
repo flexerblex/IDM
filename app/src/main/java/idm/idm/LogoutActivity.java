@@ -1,4 +1,4 @@
-package com.example.idm;
+package idm.idm;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +18,7 @@ public class LogoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logout);
-         LogOut = (Button) findViewById(R.id.buttonLogOut);
+        LogOut = (Button) findViewById(R.id.buttonLogOut);
         Intent in = getIntent();
         String string = in.getStringExtra("message");
         LogOut.setOnClickListener(new View.OnClickListener() {
@@ -35,18 +35,18 @@ public class LogoutActivity extends AppCompatActivity {
                                 startActivity(i);
                             }
 
-                            });
+                        });
                 builder.setNegativeButton("No",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                 dialog.cancel();
+                                dialog.cancel();
                             }
                         });
                 AlertDialog alert11 = builder.create();
                 alert11.show();
-                        }
+            }
 
-            });
-        }
+        });
     }
+}
