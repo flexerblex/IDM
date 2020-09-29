@@ -10,7 +10,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -37,6 +39,15 @@ public class Server {
         }
     }
 
+    public void register(JSONObject postData) {
+        Log.d("test", "Login Method Hit.");
+        try {
+            new RegisterRequest().execute(postData.toString());
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     private class LoginRequest extends AsyncTask<String, Integer, JSONObject> {
 
@@ -86,4 +97,44 @@ public class Server {
         throw new RuntimeException("Stub");
     }
 
+    private class RegisterRequest extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String data = "";
+
+            HttpURLConnection httpURLConnection = null;
+            try {
+
+                url = new URL("http://3.128.46.46/");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                wr.writeBytes("PostData=" + params[0]);
+                wr.flush();
+                wr.close();
+
+                InputStream in = conn.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(in);
+
+                int inputStreamData = inputStreamReader.read();
+                while (inputStreamData != -1) {
+                    char current = (char) inputStreamData;
+                    inputStreamData = inputStreamReader.read();
+                    data += current;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (httpURLConnection != null) {
+                    httpURLConnection.disconnect();
+                }
+            }
+
+            return data;
+        }
+    }
 }

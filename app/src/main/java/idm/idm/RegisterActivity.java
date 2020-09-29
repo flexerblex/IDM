@@ -7,7 +7,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import androidx.appcompat.app.AppCompatActivity;
+import idm.idm.servercom.Server;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -38,6 +42,18 @@ public class RegisterActivity extends AppCompatActivity {
         CreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                JSONObject postData = new JSONObject();
+                try {
+                    postData.put("username", Username.getText().toString());
+                    postData.put("email", Email.getText().toString());
+                    postData.put("firstname", FirstName.getText().toString());
+                    postData.put("lastname", LastName.getText().toString());
+                    postData.put("password", Password.getText().toString());
+
+                    Server.SERVER.register(postData);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Intent intent = new Intent (RegisterActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
