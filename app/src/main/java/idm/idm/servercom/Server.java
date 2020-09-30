@@ -12,12 +12,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
 
 /**
  * Used to make requests to a server.
@@ -27,44 +26,38 @@ public class Server {
 
     public static final Server SERVER = new Server();
 
-    private final String ADDRESS = "http://3.128.46.46/";
+    private final String ADDRESS = "3.128.46.46";
     private URL url;
 
-    private static String status;
-
-    public boolean login(String username, String password)
-    {
+    public void login(String username, String password) {
+        Log.d("test", "Login Method Hit.");
         try {
             new LoginRequest().execute(username, password).get();
-            if(status.contains("200"))
-                return true;
         }
-        catch(Exception exc)
-        {
-            System.out.println(exc.getMessage());
+        catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        return false;
     }
 
-    private class LoginRequest extends AsyncTask<String, Integer, JSONObject>
-    {
+    public void register(JSONObject postData) {
+        Log.d("test", "Login Method Hit.");
+        try {
+            new RegisterRequest().execute(postData.toString());
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-            super.onPostExecute(jsonObject);
-        }
+    private class LoginRequest extends AsyncTask<String, Integer, JSONObject> {
+
         @Override
         protected JSONObject doInBackground(String... strings) {
             try {
                 loginTask(strings[0], strings[1]);
             }
-            catch(JSONException jsonexc)
-            {
-                System.out.println(jsonexc.getMessage());
+            catch(JSONException e) {
+                System.out.println(e.getMessage());
                 System.exit(1);
             }
             return null;
@@ -74,48 +67,26 @@ public class Server {
     private void loginTask (String username, String password) throws JSONException {
 
         try {
+            url = new URL("http://3.128.46.46/");
 
-            url = new URL(ADDRESS+"login");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            Log.d(conn.toString(), "HttpURLConnection established...");
 
-            JSONObject loginData = new JSONObject();
-            loginData.put("username", username);
-            loginData.put("password", password);
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Accept", "application/json");
 
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            Log.d(con.toString(), "HttpURLConnection established...");
-
-            con.setRequestMethod("POST");
-            //con.setDoOutput(true); //don't include this in POST request
-            con.setRequestProperty("Content-Type", "application/json");
-
-            DataOutputStream outputStream = new DataOutputStream(con.getOutputStream());
-            outputStream.writeBytes(loginData.toString());
-            outputStream.flush();
-            outputStream.close();
-
-            Log.d(loginData.toString(), "LOGIN DATA");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            System.out.println("Got inputStream: " + in);
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+            try(BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response.toString());
+                Log.d(response.toString(), "SERVER RESPONSE");
             }
-            in.close();
-
-            String verification = con.getHeaderField("status");
-            System.out.println("Header Field: " + verification);
-
-            System.out.println("Response: " + response.toString());
-
-            status = response.toString();
-
-            con.disconnect();
-
         }
-
         catch(IOException exc)
         {
             System.out.println(exc.getMessage());
@@ -126,4 +97,44 @@ public class Server {
         throw new RuntimeException("Stub");
     }
 
+    private class RegisterRequest extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String data = "";
+
+            HttpURLConnection httpURLConnection = null;
+            try {
+
+                url = new URL("http://3.128.46.46/");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                wr.writeBytes("PostData=" + params[0]);
+                wr.flush();
+                wr.close();
+
+                InputStream in = conn.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(in);
+
+                int inputStreamData = inputStreamReader.read();
+                while (inputStreamData != -1) {
+                    char current = (char) inputStreamData;
+                    inputStreamData = inputStreamReader.read();
+                    data += current;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (httpURLConnection != null) {
+                    httpURLConnection.disconnect();
+                }
+            }
+
+            return data;
+        }
+    }
 }
