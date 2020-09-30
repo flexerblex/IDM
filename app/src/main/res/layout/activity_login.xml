@@ -76,15 +76,15 @@
 
     <TextView
         android:id="@+id/createAccount"
-        android:layout_width="137dp"
-        android:layout_height="25dp"
+        android:layout_width="123dp"
+        android:layout_height="33dp"
         android:layout_marginTop="8dp"
         android:text="Create an account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton"
-        app:layout_constraintVertical_bias="0.01" />
+        app:layout_constraintVertical_bias="0.035" />
 
     <TextView
         android:id="@+id/loginView"
@@ -97,5 +97,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/logInfo"
+        android:layout_width="152dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="284dp"
+        android:text="Attempts Remaining: 3 "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createAccount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
