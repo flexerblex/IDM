@@ -40,12 +40,26 @@ public class Server {
     }
 
     public void register(JSONObject postData) {
-        Log.d("test", "Login Method Hit.");
         try {
-            new RegisterRequest().execute(postData.toString());
+            new registerRequest().execute(postData.toString());
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    private class registerRequest extends AsyncTask<String, Integer, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+            try {
+                registerTask(strings[0]);
+            }
+            catch(JSONException e) {
+                System.out.println(e.getMessage());
+                System.exit(1);
+            }
+            return null;
         }
     }
 
@@ -97,44 +111,32 @@ public class Server {
         throw new RuntimeException("Stub");
     }
 
-    private class RegisterRequest extends AsyncTask<String, Void, String> {
+    private void registerTask (String JSON) throws JSONException {
 
-        @Override
-        protected String doInBackground(String... params) {
+        try {
 
-            String data = "";
+            Log.i("JSON", JSON);
 
-            HttpURLConnection httpURLConnection = null;
-            try {
+            url = new URL("http://3.128.46.46/register");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            conn.setRequestProperty("Accept","application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
 
-                url = new URL("http://3.128.46.46/");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+            wr.writeBytes(JSON);
+            wr.flush();
+            wr.close();
 
-                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-                wr.writeBytes("PostData=" + params[0]);
-                wr.flush();
-                wr.close();
+            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+            Log.i("MSG" , conn.getResponseMessage());
 
-                InputStream in = conn.getInputStream();
-                InputStreamReader inputStreamReader = new InputStreamReader(in);
-
-                int inputStreamData = inputStreamReader.read();
-                while (inputStreamData != -1) {
-                    char current = (char) inputStreamData;
-                    inputStreamData = inputStreamReader.read();
-                    data += current;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (httpURLConnection != null) {
-                    httpURLConnection.disconnect();
-                }
-            }
-
-            return data;
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 }
