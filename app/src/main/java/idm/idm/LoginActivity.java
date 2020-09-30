@@ -22,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView Info;
     private Button Login;
     private TextView Create;
+    private int counter = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Name = (EditText)findViewById((R.id.loginUserName));
         Password = (EditText) findViewById(R.id.password);
+        Info = (TextView)findViewById(R.id.logInfo);
 
         Login = (Button)findViewById(R.id.loginButton);
         Create = (TextView) findViewById(R.id.createAccount);
@@ -38,12 +40,11 @@ public class LoginActivity extends AppCompatActivity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validIDTest(Name.getText().toString(), Password.getText().toString());
+                validID(Name.getText().toString(), Password.getText().toString());
 
                 System.out.println("reached 1");
             }
         });
-
 
         Create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,18 +56,22 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void validIDTest(String userName, String userPass) {
-        //if server authenticates user/password
-        String test = userName;
+    private void validID(String userName, String userPass) {
 
-        Server.SERVER.login(userName, userPass);
+        if(Server.SERVER.login(userName,userPass)) {
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+        else {
+            counter--;
 
-        Log.d("next test", "Server established.");
-
-        Intent toHome = new Intent (LoginActivity.this, HomeActivity.class);
-        toHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(toHome);
+            Info.setText("Attempts Remaining: " + String.valueOf(counter));
+            if(counter == 0){
+                Login.setEnabled(false);
+                Info.setText("Try again next time.");
+            }
+        }
     }
-
 
 }
