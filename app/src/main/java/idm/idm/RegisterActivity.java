@@ -2,6 +2,7 @@ package idm.idm;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,19 +43,24 @@ public class RegisterActivity extends AppCompatActivity {
         CreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                JSONObject postData = new JSONObject();
-                try {
-                    postData.put("username", Username.getText().toString());
-                    postData.put("email", Email.getText().toString());
-                    postData.put("firstname", FirstName.getText().toString());
-                    postData.put("lastname", LastName.getText().toString());
-                    postData.put("password", Password.getText().toString());
 
-                    Server.SERVER.register(postData);
+                JSONObject mainpostData = new JSONObject();
+                JSONObject inpostData = new JSONObject();
+                try {
+                    inpostData.put("username", Username.getText().toString());
+                    inpostData.put("email", Email.getText().toString());
+                    inpostData.put("fname", FirstName.getText().toString());
+                    inpostData.put("lname", LastName.getText().toString());
+                    inpostData.put("password", Password.getText().toString());
+
+                    mainpostData.put("user", inpostData);
+                    Log.i("JSON", mainpostData.toString());
+
+                    Server.SERVER.register(mainpostData);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent (RegisterActivity.this, HomeActivity.class);
+                Intent intent = new Intent (RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
