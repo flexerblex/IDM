@@ -75,8 +75,8 @@ public class LoginActivity extends AppCompatActivity {
 
             if(counter == 0){
                 lockTime = new Date();
-                Login.setEnabled(false);
-                Info.setText("Try 5 minutes later.");
+                //Login.setEnabled(false);
+                Info.setText("Try 2 minutes later.");
             }
             else if (counter < 0) {
 
@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                 long remainingTime = currentTime.getTime() - lockTime.getTime();
                 int minutes = (int) ((remainingTime / (1000*60)) % 60);
 
-                if (remainingTime > 300000) {
+                if (remainingTime > 12000) {
                     counter = 3;
                     if (Server.SERVER.login(userName,userPass)) {
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Login.setEnabled(false);
+                    //Login.setEnabled(false);
                     Info.setText("Try " + String.valueOf(minutes) + " minutes later.");
                 }
             }
