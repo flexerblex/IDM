@@ -1,5 +1,6 @@
 package idm.idm.servercom;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -10,7 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -18,6 +22,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Used to make requests to a server.
@@ -105,9 +111,6 @@ public class Server {
             }
             in.close();
 
-            String verification = con.getHeaderField("status");
-            System.out.println("Header Field: " + verification);
-
             System.out.println("Response: " + response.toString());
 
             status = response.toString();
@@ -121,6 +124,164 @@ public class Server {
             System.out.println(exc.getMessage());
         }
     }
+
+    public void UploadTask(File path)
+    {
+        try {
+            new UploadTaskAsync().execute(path).get();
+        }
+        catch(Exception exc)
+        {
+            System.out.println(exc.getMessage());
+        }
+    }
+
+    private class UploadTaskAsync extends AsyncTask<File, Integer, JSONObject>
+    {
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected JSONObject doInBackground(File... files) {
+            try {
+                UploadTaskMethod(files[0]);
+            }
+            catch(JSONException jsonexc)
+            {
+                System.out.println(jsonexc.getMessage());
+                System.exit(1);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+        }
+    }
+
+    public void UploadTaskMethod(File path) throws JSONException {
+        try {
+            url = new URL(ADDRESS+"upload");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            Log.d(con.toString(), "HttpURLConnection established...");
+
+            Log.d("path", path.getName());
+            Log.d("path", path.getPath());
+
+            con.setDoOutput(true);
+            con.setDoInput(true);
+            con.setChunkedStreamingMode(1024 * 1024);
+            con.setRequestMethod("POST");
+
+            //con.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+            con.setRequestProperty("connection", "Keep-Alive");
+            con.setRequestProperty("Charset", "UTF-8");
+            //con.setRequestProperty("Content-Type", "multipart/form-data;file=" + path.getName());
+            con.setRequestProperty("name", path.getName());
+            con.connect();
+
+            OutputStream out = new DataOutputStream(con.getOutputStream());
+            DataInputStream in = new DataInputStream(new FileInputStream(path));
+            int bytes = 0;
+            byte[] bufferOut = new byte[1024];
+            while ((bytes = in.read(bufferOut)) != -1) {
+                out.write(bufferOut, 0, bytes);
+            }
+            in.close();
+            out.flush();
+            out.close();
+
+            int response = con.getResponseCode();
+
+            if (response == 200) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+                Log.e("Response", "upload file success-->>");
+            } else {
+                Log.e("Response", "upload file fail-->> response = " + response);
+            }
+
+        }
+
+        catch (IOException exc ) {
+            System.out.println(exc.getMessage());
+        }
+    }
+
+//    public void UploadTask(Bitmap image)
+//    {
+//        try {
+//            new UploadTaskAsync().execute(image).get();
+//        }
+//        catch(Exception exc)
+//        {
+//            System.out.println(exc.getMessage());
+//        }
+//    }
+//
+//    private class UploadTaskAsync extends AsyncTask<Bitmap, Integer, JSONObject>
+//    {
+//
+//        @Override
+//        protected void onProgressUpdate(Integer... values) {
+//            super.onProgressUpdate(values);
+//        }
+//
+//        @Override
+//        protected JSONObject doInBackground(Bitmap... bitmaps) {
+//            try {
+//                UploadTaskMethod(bitmaps[0]);
+//            }
+//            catch(JSONException jsonexc) {
+//                System.out.println(jsonexc.getMessage());
+//                System.exit(1);
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(JSONObject jsonObject) {
+//            super.onPostExecute(jsonObject);
+//        }
+//    }
+//
+//    public void UploadTaskMethod(Bitmap image) throws JSONException {
+//        try {
+//            url = new URL(ADDRESS+"upload");
+//            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//            Log.d(con.toString(), "HttpURLConnection established...");
+//
+//            Log.d("bitmap", image.toString());
+//
+//            con.setDoInput(true);
+//            con.setRequestMethod("POST");
+//            con.setDoOutput(true);
+//            con.connect();
+//
+//            OutputStream output = con.getOutputStream();
+//            image.compress(Bitmap.CompressFormat.JPEG, 50, output);
+//            Log.d("made it outputstream", image.toString());
+//            output.close();
+//
+//            Scanner result = new Scanner(con.getInputStream());
+//            String response = result.nextLine();
+//            Log.d("Image Uploader", response);
+//
+//            result.close();
+//
+//        }
+//
+//        catch (IOException exc ) {
+//            System.out.println(exc.getMessage());
+//        }
+//    }
 
     public URLConnection openConnection() throws IOException {
         throw new RuntimeException("Stub");
