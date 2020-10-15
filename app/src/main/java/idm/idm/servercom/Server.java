@@ -11,11 +11,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+
+import java.io.DataOutputStream;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -50,6 +55,30 @@ public class Server {
             System.out.println(exc.getMessage());
         }
         return false;
+    }
+
+    public void register(JSONObject postData) {
+        try {
+            new registerRequest().execute(postData.toString());
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private class registerRequest extends AsyncTask<String, Integer, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+            try {
+                registerTask(strings[0]);
+            }
+            catch(JSONException e) {
+                System.out.println(e.getMessage());
+                System.exit(1);
+            }
+            return null;
+        }
     }
 
     private class LoginRequest extends AsyncTask<String, Integer, JSONObject>
@@ -215,76 +244,36 @@ public class Server {
         }
     }
 
-//    public void UploadTask(Bitmap image)
-//    {
-//        try {
-//            new UploadTaskAsync().execute(image).get();
-//        }
-//        catch(Exception exc)
-//        {
-//            System.out.println(exc.getMessage());
-//        }
-//    }
-//
-//    private class UploadTaskAsync extends AsyncTask<Bitmap, Integer, JSONObject>
-//    {
-//
-//        @Override
-//        protected void onProgressUpdate(Integer... values) {
-//            super.onProgressUpdate(values);
-//        }
-//
-//        @Override
-//        protected JSONObject doInBackground(Bitmap... bitmaps) {
-//            try {
-//                UploadTaskMethod(bitmaps[0]);
-//            }
-//            catch(JSONException jsonexc) {
-//                System.out.println(jsonexc.getMessage());
-//                System.exit(1);
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(JSONObject jsonObject) {
-//            super.onPostExecute(jsonObject);
-//        }
-//    }
-//
-//    public void UploadTaskMethod(Bitmap image) throws JSONException {
-//        try {
-//            url = new URL(ADDRESS+"upload");
-//            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//            Log.d(con.toString(), "HttpURLConnection established...");
-//
-//            Log.d("bitmap", image.toString());
-//
-//            con.setDoInput(true);
-//            con.setRequestMethod("POST");
-//            con.setDoOutput(true);
-//            con.connect();
-//
-//            OutputStream output = con.getOutputStream();
-//            image.compress(Bitmap.CompressFormat.JPEG, 50, output);
-//            Log.d("made it outputstream", image.toString());
-//            output.close();
-//
-//            Scanner result = new Scanner(con.getInputStream());
-//            String response = result.nextLine();
-//            Log.d("Image Uploader", response);
-//
-//            result.close();
-//
-//        }
-//
-//        catch (IOException exc ) {
-//            System.out.println(exc.getMessage());
-//        }
-//    }
-
     public URLConnection openConnection() throws IOException {
         throw new RuntimeException("Stub");
     }
 
+    private void registerTask (String JSON) throws JSONException {
+
+        try {
+
+            Log.i("JSON", JSON);
+
+            url = new URL("http://3.128.46.46/register");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            conn.setRequestProperty("Accept","application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+
+            DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+            wr.writeBytes(JSON);
+            wr.flush();
+            wr.close();
+
+            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+            Log.i("MSG" , conn.getResponseMessage());
+
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }
