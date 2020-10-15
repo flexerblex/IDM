@@ -1,36 +1,25 @@
 package idm.idm.servercom;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-
-import java.io.DataOutputStream;
-
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+
+import okhttp3.OkHttpClient;
+import okhttp3.*;
 
 /**
+ * Created by Lily
  * Used to make requests to a server.
  */
 
@@ -40,8 +29,11 @@ public class Server {
 
     private final String ADDRESS = "http://3.128.46.46/";
     private URL url;
+    private static String session_cookie;
 
     private static String status;
+    private String status1;
+    private String message;
 
     public boolean login(String username, String password)
     {
@@ -110,15 +102,16 @@ public class Server {
 
         try {
 
-            url = new URL(ADDRESS+"login");
-
             JSONObject loginData = new JSONObject();
             loginData.put("username", username);
             loginData.put("password", password);
 
+            //Creating Objects
+            url = new URL(ADDRESS+"login");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             Log.d(con.toString(), "HttpURLConnection established...");
 
+            //set up connection
             con.setRequestMethod("POST");
             //con.setDoOutput(true); //don't include this in POST request
             con.setRequestProperty("Content-Type", "application/json");
@@ -128,7 +121,7 @@ public class Server {
             outputStream.flush();
             outputStream.close();
 
-            Log.d(loginData.toString(), "LOGIN DATA");
+            Log.d(loginData.toString(), "LOGIN DATA"); //debug
 
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             System.out.println("Got inputStream: " + in);
@@ -143,6 +136,11 @@ public class Server {
             System.out.println("Response: " + response.toString());
 
             status = response.toString();
+
+            JSONObject jsonObj = new JSONObject(status);
+            //String cookie = jsonObj.getString("message");
+            session_cookie = jsonObj.getString("message");
+            System.out.println(session_cookie); //debug
 
             con.disconnect();
 
@@ -192,51 +190,26 @@ public class Server {
         }
     }
 
+
+
     public void UploadTaskMethod(File path) throws JSONException {
         try {
-            url = new URL(ADDRESS+"upload");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            Log.d(con.toString(), "HttpURLConnection established...");
 
-            Log.d("path", path.getName());
-            Log.d("path", path.getPath());
-
-            con.setDoOutput(true);
-            con.setDoInput(true);
-            con.setChunkedStreamingMode(1024 * 1024);
-            con.setRequestMethod("POST");
-
-            //con.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-            con.setRequestProperty("connection", "Keep-Alive");
-            con.setRequestProperty("Charset", "UTF-8");
-            //con.setRequestProperty("Content-Type", "multipart/form-data;file=" + path.getName());
-            con.setRequestProperty("name", path.getName());
-            con.connect();
-
-            OutputStream out = new DataOutputStream(con.getOutputStream());
-            DataInputStream in = new DataInputStream(new FileInputStream(path));
-            int bytes = 0;
-            byte[] bufferOut = new byte[1024];
-            while ((bytes = in.read(bufferOut)) != -1) {
-                out.write(bufferOut, 0, bytes);
-            }
-            in.close();
-            out.flush();
-            out.close();
-
-            int response = con.getResponseCode();
-
-            if (response == 200) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-                Log.e("Response", "upload file success-->>");
-            } else {
-                Log.e("Response", "upload file fail-->> response = " + response);
-            }
-
+            OkHttpClient client = new OkHttpClient().newBuilder()
+                    .build();
+            MediaType mediaType = MediaType.parse("text/plain");
+            RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("face",path.getName(),
+                            RequestBody.create(MediaType.parse("application/octet-stream"),
+                                    new File(path.getPath())))
+                    .build();
+            Request request = new Request.Builder()
+                    .url("http://3.128.46.46/upload")
+                    .method("POST", body)
+                    .addHeader("authorization", session_cookie)
+                    .build();
+            Response response = client.newCall(request).execute();
+            System.out.println(response);
         }
 
         catch (IOException exc ) {
