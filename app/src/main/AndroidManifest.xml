@@ -11,9 +11,9 @@
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/i"
         android:label="Identity Management System"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/i"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity

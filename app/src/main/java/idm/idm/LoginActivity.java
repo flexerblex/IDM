@@ -2,17 +2,25 @@ package idm.idm;
 
 import android.content.Intent;
 //import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import java.io.File;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import java.io.IOException;
 
@@ -24,9 +32,13 @@ public class LoginActivity extends AppCompatActivity {
     private EditText Password;
     private TextView Info;
     private Button Login;
+    private ImageButton LoginFace;
     private TextView Create;
     private int counter = 3;
     private Date lockTime;
+
+    private String currentPhotoPath;
+    private File imageFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         Info = (TextView)findViewById(R.id.logInfo);
 
         Login = (Button)findViewById(R.id.loginButton);
+        LoginFace = (ImageButton)findViewById((R.id.faceID));
         Create = (TextView) findViewById(R.id.createAccount);
 
         Login.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +60,27 @@ public class LoginActivity extends AppCompatActivity {
                 validID(Name.getText().toString(), Password.getText().toString());
 
                 System.out.println("reached 1");
+            }
+        });
+
+        LoginFace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String fileName = "photo";
+                File storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                try {
+                    imageFile = File.createTempFile(fileName, ".jpg", storageDirectory);
+                    currentPhotoPath = imageFile.getAbsolutePath();
+
+                    Uri imageUri = FileProvider.getUriForFile(LoginActivity.this,
+                            "idm.idm.provider", imageFile);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent,1);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -69,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else {
             counter--;
-            Info.setText("Attempts Remaining: " + String.valueOf(counter));
+            Info.setText("ATTEMPTS REMAINING: " + String.valueOf(counter));
 
             //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -92,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                     }else{
                         counter --;
-                        Info.setText("Attempts Remaining: " + String.valueOf(counter));
+                        Info.setText("ATTEMPTS REMAINING: " + String.valueOf(counter));
                     }
                 }
                 else {
@@ -100,6 +134,17 @@ public class LoginActivity extends AppCompatActivity {
                     Info.setText("Try " + String.valueOf(minutes) + " minutes later.");
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK ) {
+
+            Server.SERVER.UploadTask(imageFile);
+
         }
     }
 

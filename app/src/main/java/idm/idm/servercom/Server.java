@@ -1,7 +1,10 @@
 package idm.idm.servercom;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +17,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Base64;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import okhttp3.OkHttpClient;
 import okhttp3.*;
 
@@ -31,16 +40,18 @@ public class Server {
     private URL url;
     private static String session_cookie;
 
+    public static String firstName;
+
     private static String status;
-    private String status1;
-    private String message;
 
     public boolean login(String username, String password)
     {
         try {
             new LoginRequest().execute(username, password).get();
-            if(status.contains("200"))
+            if(status.contains("200")) {
                 return true;
+            }
+
         }
         catch(Exception exc)
         {
@@ -84,6 +95,7 @@ public class Server {
         protected void onPostExecute(JSONObject jsonObject) {
             super.onPostExecute(jsonObject);
         }
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected JSONObject doInBackground(String... strings) {
             try {
@@ -98,6 +110,7 @@ public class Server {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void loginTask (String username, String password) throws JSONException {
 
         try {
@@ -138,15 +151,44 @@ public class Server {
             status = response.toString();
 
             JSONObject jsonObj = new JSONObject(status);
-            //String cookie = jsonObj.getString("message");
+
             session_cookie = jsonObj.getString("message");
             System.out.println(session_cookie); //debug
+
+            DecodeJWT();
 
             con.disconnect();
 
         }
 
         catch(IOException exc)
+        {
+            System.out.println(exc.getMessage());
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void DecodeJWT() {
+        try {
+
+            String[] split_string = session_cookie.split("\\.");
+            String base64EncodedBody = split_string[1];
+
+            String body = new String(Base64.getUrlDecoder().decode(base64EncodedBody));
+
+            System.out.println(body);
+
+            JSONObject jsonObject = new JSONObject(body);
+
+            String user = jsonObject.getString("user");
+            System.out.println(user);
+
+            JSONObject jsonObject2 = new JSONObject(user);
+            firstName = jsonObject2.getString("fname");
+            System.out.println(firstName);
+
+        }
+        catch(Exception exc)
         {
             System.out.println(exc.getMessage());
         }
@@ -194,6 +236,8 @@ public class Server {
 
     public void UploadTaskMethod(File path) throws JSONException {
         try {
+
+            System.out.println(path.getName()); //this is "photo5127015921858211407.jpg"
 
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
