@@ -22,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 
 import idm.idm.servercom.FaceRecognizer;
@@ -142,11 +144,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        String username = "Dummy";
+
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
-            if (FaceRecognizer.FACERECOGNIZER.UploadTask(imageFile)) {
+            if (FaceRecognizer.FACERECOGNIZER.Authenticate(imageFile, username)) {
                 Intent toHome2 = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(toHome2);
+            }
+            else {
+                System.out.println("Error authenticating.");
             }
         }
     }

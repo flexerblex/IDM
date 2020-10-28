@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,9 +31,9 @@ import idm.idm.servercom.Server;
 public class HomeActivity extends AppCompatActivity {
 
     private TextView Name;
-    private Button Face;
-    private Button Fingerprint;
-    private Button Voice;
+    private ImageButton Face;
+    private ImageButton Fingerprint;
+    private ImageButton Voice;
     private String currentPhotoPath;
     private File imageFile;
 
@@ -46,9 +47,9 @@ public class HomeActivity extends AppCompatActivity {
             Name.setText(Server.firstName);
         }
 
-        Face = (Button)findViewById(R.id.faceRegister);
-        Fingerprint = (Button)findViewById(R.id.fingerprintRegister);
-        Voice = (Button)findViewById(R.id.vocalRegister);
+        Face = (ImageButton)findViewById(R.id.faceRegister);
+        //Fingerprint = (Button)findViewById(R.id.fingerprintRegister);
+        Voice = (ImageButton)findViewById(R.id.voiceRegister);
 
         Face.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +83,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
-            if (FaceRecognizer.FACERECOGNIZER.UploadTask(imageFile)) {
+            if (FaceRecognizer.FACERECOGNIZER.Upload(imageFile)) {
                 System.out.println("success");
             }
             else {
