@@ -38,7 +38,7 @@ public class Server {
 
     private final String ADDRESS = "http://3.128.46.46/";
     private URL url;
-    private static String session_cookie;
+    public  static String session_cookie;
 
     public static String firstName;
 
@@ -194,84 +194,13 @@ public class Server {
         }
     }
 
-    public void UploadTask(File path)
-    {
-        try {
-            new UploadTaskAsync().execute(path).get();
-        }
-        catch(Exception exc)
-        {
-            System.out.println(exc.getMessage());
-        }
-    }
-
-    private class UploadTaskAsync extends AsyncTask<File, Integer, JSONObject>
-    {
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected JSONObject doInBackground(File... files) {
-            try {
-                UploadTaskMethod(files[0]);
-            }
-            catch(JSONException jsonexc)
-            {
-                System.out.println(jsonexc.getMessage());
-                System.exit(1);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-            super.onPostExecute(jsonObject);
-        }
-    }
-
-
-
-    public void UploadTaskMethod(File path) throws JSONException {
-        try {
-
-            System.out.println(path.getName()); //this is "photo5127015921858211407.jpg"
-
-            OkHttpClient client = new OkHttpClient().newBuilder()
-                    .build();
-            MediaType mediaType = MediaType.parse("text/plain");
-            RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                    .addFormDataPart("face",path.getName(),
-                            RequestBody.create(MediaType.parse("application/octet-stream"),
-                                    new File(path.getPath())))
-                    .build();
-            Request request = new Request.Builder()
-                    .url("http://3.128.46.46/upload")
-                    .method("POST", body)
-                    .addHeader("authorization", session_cookie)
-                    .build();
-            Response response = client.newCall(request).execute();
-            System.out.println(response);
-        }
-
-        catch (IOException exc ) {
-            System.out.println(exc.getMessage());
-        }
-    }
-
-    public URLConnection openConnection() throws IOException {
-        throw new RuntimeException("Stub");
-    }
-
     private void registerTask (String JSON) throws JSONException {
 
         try {
 
             Log.i("JSON", JSON);
 
-            url = new URL("http://3.128.46.46/register");
+            url = new URL(ADDRESS+"register");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");

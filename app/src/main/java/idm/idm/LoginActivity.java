@@ -24,6 +24,7 @@ import androidx.core.content.FileProvider;
 
 import java.io.IOException;
 
+import idm.idm.servercom.FaceRecognizer;
 import idm.idm.servercom.Server;
 
 public class LoginActivity extends AppCompatActivity {
@@ -143,8 +144,10 @@ public class LoginActivity extends AppCompatActivity {
 
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
-            Server.SERVER.UploadTask(imageFile);
-
+            if (FaceRecognizer.FACERECOGNIZER.UploadTask(imageFile)) {
+                Intent toHome2 = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(toHome2);
+            }
         }
     }
 

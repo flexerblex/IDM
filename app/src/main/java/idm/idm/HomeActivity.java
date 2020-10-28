@@ -23,6 +23,8 @@ import androidx.core.content.FileProvider;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+
+import idm.idm.servercom.FaceRecognizer;
 import idm.idm.servercom.Server;
 
 public class HomeActivity extends AppCompatActivity {
@@ -80,7 +82,12 @@ public class HomeActivity extends AppCompatActivity {
 
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
-            Server.SERVER.UploadTask(imageFile);
+            if (FaceRecognizer.FACERECOGNIZER.UploadTask(imageFile)) {
+                System.out.println("success");
+            }
+            else {
+                System.out.println("fail");
+            }
 
         }
     }
