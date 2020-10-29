@@ -1,6 +1,7 @@
 package idm.idm;
 
 import android.content.Intent;
+//import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button Login;
     private TextView Create;
     private int counter = 3;
+    private Date lockTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +62,43 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validID(String userName, String userPass) {
 
-        if(Server.SERVER.login(userName,userPass)) {
+        if(counter > 0 && Server.SERVER.login(userName,userPass)) {
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
         else {
             counter--;
-
             Info.setText("Attempts Remaining: " + String.valueOf(counter));
+
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
             if(counter == 0){
-                Login.setEnabled(false);
-                Info.setText("Try again next time.");
+                lockTime = new Date();
+                //Login.setEnabled(false);
+                Info.setText("Try 2 minutes later.");
+            }
+            else if (counter < 0) {
+
+                Date currentTime = new Date();
+                long remainingTime = currentTime.getTime() - lockTime.getTime();
+                int minutes = (int) ((remainingTime / (1000*60)) % 60);
+
+                if (remainingTime > 12000) {
+                    counter = 3;
+                    if (Server.SERVER.login(userName,userPass)) {
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }else{
+                        counter --;
+                        Info.setText("Attempts Remaining: " + String.valueOf(counter));
+                    }
+                }
+                else {
+                    //Login.setEnabled(false);
+                    Info.setText("Try " + String.valueOf(minutes) + " minutes later.");
+                }
             }
         }
     }
