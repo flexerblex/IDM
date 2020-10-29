@@ -1,6 +1,7 @@
 package idm.idm;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 public class Logout {
@@ -14,7 +15,16 @@ public class Logout {
         setContentView(R.layout.activity_logout);
 
 
-        Logout = (Button)findViewById(R.id.logoutButton);
+        Logout = (Button)findViewById(R.id.buttonLogOut);
+        Logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //kill token
+                //redirect to LoginActivity
+
+                System.out.println("logged out");
+            }
+        });
 
     }
 
