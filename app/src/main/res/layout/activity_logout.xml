@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/tokyo"
     tools:context=".LogoutActivity">
 
 
@@ -13,10 +12,10 @@
         android:layout_width="118dp"
         android:layout_height="48dp"
         android:text="LogOut"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="281dp"
         tools:layout_editor_absoluteY="17dp"
-        tools:visibility="visible"
-        tools:ignore="MissingConstraints" />
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/textView"

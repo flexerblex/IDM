@@ -42,7 +42,8 @@
         app:layout_constraintBottom_toTopOf="@+id/loginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginUserName" />
+        app:layout_constraintTop_toBottomOf="@+id/loginUserName"
+        app:layout_constraintVertical_bias="0.7" />
 
     <Button
         android:id="@+id/loginButton"
@@ -53,10 +54,35 @@
         android:text="LOGIN"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.405" />
+        app:layout_constraintVertical_bias="0.467" />
+
+    <TextView
+        android:id="@+id/createAccount"
+        android:layout_width="143dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="8dp"
+        android:text="CREATE AN ACCOUNT"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton"
+        app:layout_constraintVertical_bias="0.06" />
+
+    <TextView
+        android:id="@+id/logInfo"
+        android:layout_width="123dp"
+        android:layout_height="17dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="284dp"
+        android:text="ATTEMPTS REMAINING: 3 "
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createAccount" />
 
     <ProgressBar
         android:id="@+id/loading"
@@ -75,40 +101,30 @@
         android:layout_marginLeft="32dp" />
 
     <TextView
-        android:id="@+id/createAccount"
-        android:layout_width="123dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="8dp"
-        android:text="Create an account"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton"
-        app:layout_constraintVertical_bias="0.035" />
-
-    <TextView
         android:id="@+id/loginView"
         android:layout_width="41dp"
         android:layout_height="20dp"
         android:layout_marginTop="77dp"
         android:layout_marginBottom="26dp"
-        android:text="Login"
+        android:text="LOGIN"
         app:layout_constraintBottom_toTopOf="@+id/loginUserName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/logInfo"
-        android:layout_width="152dp"
-        android:layout_height="22dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginBottom="284dp"
-        android:text="Attempts Remaining: 3 "
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageButton
+        android:id="@+id/faceID"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginBottom="15dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.914"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createAccount" />
+        app:layout_constraintTop_toBottomOf="@+id/loginUserName"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/face" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
