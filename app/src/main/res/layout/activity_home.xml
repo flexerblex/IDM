@@ -8,6 +8,16 @@
     android:layout_gravity="center">
 
     <Button
+        android:id="@+id/buttonLogOut2"
+        android:layout_width="118dp"
+        android:layout_height="48dp"
+        android:text="LogOut"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="146dp"
+        tools:layout_editor_absoluteY="419dp"
+        tools:visibility="visible" />
+
+    <Button
         android:id="@+id/vocalRegister"
         android:layout_width="374dp"
         android:layout_height="55dp"
