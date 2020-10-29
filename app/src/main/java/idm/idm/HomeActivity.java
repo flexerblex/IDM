@@ -44,6 +44,13 @@ public class HomeActivity extends AppCompatActivity {
         Face = (Button)findViewById(R.id.faceRegister);
         Fingerprint = (Button)findViewById(R.id.fingerprintRegister);
         Voice = (Button)findViewById(R.id.vocalRegister);
+        Voice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this,RecordAudioActivity.class));
+            }
+        });
+
 
         Face.setOnClickListener(new View.OnClickListener() {
             @Override
