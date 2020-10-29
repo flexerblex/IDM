@@ -1,42 +1,43 @@
 package idm.idm;
 
+import android.content.Context;
 import android.content.Intent;
 //import android.icu.text.SimpleDateFormat;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.internal.Constants;
-import com.google.android.gms.tasks.Task;
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.JavaCameraView;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfRect;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.IOException;
 
 import idm.idm.servercom.Server;
 
-import static java.security.AccessController.getContext;
-
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2  {
 
     private EditText Name;
     private EditText Password;
@@ -45,10 +46,10 @@ public class LoginActivity extends AppCompatActivity {
     private TextView Create;
     private int counter = 3;
     private Date lockTime;
-
-    private GoogleSignInClient mGoogleSignInClient;
-    SignInButton signin;
-    private static final int RC_SIGN_IN = 1;
+    JavaCameraView javaCameraView;
+    File cascFile;
+    CascadeClassifier faceDetector;
+    private Mat mRgba, mGrey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
 
         Login = (Button)findViewById(R.id.loginButton);
         Create = (TextView) findViewById(R.id.createAccount);
+
+        javaCameraView = (JavaCameraView)findViewById(R.id.javaCamView);
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,96 +83,21 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        signin = findViewById(R.id.sign_in_button);
-        signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.sign_in_button:
-                        signIn();
-                        break;
-                    // ...
-                }
+        //Camera view
+        if(!OpenCVLoader.initDebug()){
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION,this,baseCallback);
+        }
+        else{
+            try {
+                baseCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-
-    }
-
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
         }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
+        javaCameraView.setCvCameraViewListener(this);
+
     }
-
-    private void handleSignInResult(Task<GoogleSignInAccount> result) {
-        //Constants.Log("handleSignInResult method use------" + result.isSuccessful());
-        if(result.isSuccessful()){
-            gotoHome();
-        }else{
-            Toast.makeText(getApplicationContext(),"Sign in cancel", Toast.LENGTH_LONG).show();
-        }
-        /**
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            // Signed in successfully, show authenticated UI.
-            //updateUI(account);
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("Error", "signInResult:failed code=" + e.getStatusCode());
-            //updateUI(null);
-        }**/
-    }
-
-    private void gotoHome(){
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-        startActivity(intent);
-    }
-
-    //need to be completed
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-    }
-
-    /**
-    private void updateUI(boolean signedIn) {
-        if (signedIn) {
-            signin.setVisibility(View.GONE);
-            signOutBtn.setVisibility(View.VISIBLE);
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
-            Bitmap icon =                  BitmapFactory.decodeResource(getContext().getResources(),R.drawable.user_defaolt);
-            imgProfilePic.setImageBitmap(ImageHelper.getRoundedCornerBitmap(getContext(),icon, 200, 200, 200, false, false, false, false));
-            signin.setVisibility(View.VISIBLE);
-            signOutButton.setVisibility(View.GONE);
-        }
-    }
-     **/
-
 
     private void validID(String userName, String userPass) {
 
@@ -214,4 +142,76 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    //Camera
+    @Override
+    public void onCameraViewStarted(int width, int height) {
+        mRgba = new Mat();
+        mGrey = new Mat();
+    }
+
+    @Override
+    public void onCameraViewStopped() {
+        mRgba.release();
+        mGrey.release();
+    }
+
+    @Override
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        mRgba = inputFrame.rgba();
+        mGrey = inputFrame.gray();
+
+        //detect face
+        MatOfRect faceDetections = new MatOfRect();
+        faceDetector.detectMultiScale(mRgba,faceDetections);
+
+
+        for(Rect rect: faceDetections.toArray()){
+            Imgproc.rectangle(mRgba, new Point(rect.x, rect.y),
+                    new Point(rect.x + rect.width, rect.y + rect.height),
+                    new Scalar(255,0,0));
+        }
+        return mRgba;
+    }
+
+    private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) throws IOException {
+            switch (status){
+                case LoaderCallbackInterface.SUCCESS:{
+                    InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalface_alt2);
+                    File cascadeDir = getDir("cascade", Context.MODE_PRIVATE);
+                    cascFile = new File(cascadeDir,"haarcascade_frontalface_alt2.xml");
+
+                    FileOutputStream fos = new FileOutputStream(cascFile);
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    while((bytesRead = is.read(buffer))!=-1){
+                        fos.write(buffer,0,bytesRead);
+                    }
+
+                    is.close();
+                    fos.close();
+
+                    faceDetector = new CascadeClassifier(cascFile.getAbsolutePath());
+
+                    if(faceDetector.empty()){
+                        faceDetector = null;
+                    }
+                    else{
+                        cascadeDir.delete();
+                    }
+                    javaCameraView.enableView();
+                }
+                break;
+
+                default: {
+                    super.onManagerConnected(status);
+                }
+                break;
+            }
+
+        }
+    };
 }
