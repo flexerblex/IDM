@@ -1,7 +1,10 @@
 package idm.idm.servercom;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +17,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Base64;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import okhttp3.OkHttpClient;
 import okhttp3.*;
 
@@ -29,18 +38,20 @@ public class Server {
 
     private final String ADDRESS = "http://3.128.46.46/";
     private URL url;
-    private static String session_cookie;
+    public  static String session_cookie;
+
+    public static String firstName;
 
     private static String status;
-    private String status1;
-    private String message;
 
     public boolean login(String username, String password)
     {
         try {
             new LoginRequest().execute(username, password).get();
-            if(status.contains("200"))
+            if(status.contains("200")) {
                 return true;
+            }
+
         }
         catch(Exception exc)
         {
@@ -84,6 +95,7 @@ public class Server {
         protected void onPostExecute(JSONObject jsonObject) {
             super.onPostExecute(jsonObject);
         }
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected JSONObject doInBackground(String... strings) {
             try {
@@ -98,6 +110,7 @@ public class Server {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void loginTask (String username, String password) throws JSONException {
 
         try {
@@ -138,9 +151,11 @@ public class Server {
             status = response.toString();
 
             JSONObject jsonObj = new JSONObject(status);
-            //String cookie = jsonObj.getString("message");
+
             session_cookie = jsonObj.getString("message");
             System.out.println(session_cookie); //debug
+
+            DecodeJWT();
 
             con.disconnect();
 
@@ -152,73 +167,31 @@ public class Server {
         }
     }
 
-    public void UploadTask(File path)
-    {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void DecodeJWT() {
         try {
-            new UploadTaskAsync().execute(path).get();
+
+            String[] split_string = session_cookie.split("\\.");
+            String base64EncodedBody = split_string[1];
+
+            String body = new String(Base64.getUrlDecoder().decode(base64EncodedBody));
+
+            System.out.println(body);
+
+            JSONObject jsonObject = new JSONObject(body);
+
+            String user = jsonObject.getString("user");
+            System.out.println(user);
+
+            JSONObject jsonObject2 = new JSONObject(user);
+            firstName = jsonObject2.getString("fname");
+            System.out.println(firstName);
+
         }
         catch(Exception exc)
         {
             System.out.println(exc.getMessage());
         }
-    }
-
-    private class UploadTaskAsync extends AsyncTask<File, Integer, JSONObject>
-    {
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected JSONObject doInBackground(File... files) {
-            try {
-                UploadTaskMethod(files[0]);
-            }
-            catch(JSONException jsonexc)
-            {
-                System.out.println(jsonexc.getMessage());
-                System.exit(1);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-            super.onPostExecute(jsonObject);
-        }
-    }
-
-
-
-    public void UploadTaskMethod(File path) throws JSONException {
-        try {
-
-            OkHttpClient client = new OkHttpClient().newBuilder()
-                    .build();
-            MediaType mediaType = MediaType.parse("text/plain");
-            RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                    .addFormDataPart("face",path.getName(),
-                            RequestBody.create(MediaType.parse("application/octet-stream"),
-                                    new File(path.getPath())))
-                    .build();
-            Request request = new Request.Builder()
-                    .url("http://3.128.46.46/upload")
-                    .method("POST", body)
-                    .addHeader("authorization", session_cookie)
-                    .build();
-            Response response = client.newCall(request).execute();
-            System.out.println(response);
-        }
-
-        catch (IOException exc ) {
-            System.out.println(exc.getMessage());
-        }
-    }
-
-    public URLConnection openConnection() throws IOException {
-        throw new RuntimeException("Stub");
     }
 
     private void registerTask (String JSON) throws JSONException {
@@ -227,7 +200,7 @@ public class Server {
 
             Log.i("JSON", JSON);
 
-            url = new URL("http://3.128.46.46/register");
+            url = new URL(ADDRESS+"register");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
