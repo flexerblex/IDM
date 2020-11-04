@@ -5,10 +5,13 @@ import android.os.AsyncTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -29,6 +32,8 @@ public class FaceRecognizer {
     private final String ADDRESS = "http://3.128.46.46/";
     private URL url;
 
+    private static String status;
+
     public static class AuthParams {
         File file;
         String username;
@@ -44,7 +49,6 @@ public class FaceRecognizer {
     {
         try {
             new UploadAsync().execute(path).get();
-            return true;
         }
         catch(Exception exc)
         {
@@ -89,17 +93,31 @@ public class FaceRecognizer {
                     .build();
             MediaType mediaType = MediaType.parse("text/plain");
             RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                    .addFormDataPart("face",path.getName(),
+                    .addFormDataPart("file",path.getName(),
                             RequestBody.create(MediaType.parse("application/octet-stream"),
                                     new File(path.getPath())))
+                    .addFormDataPart("username", "admin") //will replace with user when endpoint is complete
+                    .addFormDataPart("type", "face")
+                    .addFormDataPart("method", "create")
                     .build();
             Request request = new Request.Builder()
                     .url(ADDRESS+"upload")
                     .method("POST", body)
-                    //.addHeader("authorization", Server.session_cookie)
+//                    .addHeader("authorization", Server.session_cookie)
+                    .addHeader("authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im" +
+                            "lkIjoxLCJmbmFtZSI6IkxpbHkiLCJsbmFtZSI6IlN1YXUiLCJlbWFpbCI6ImxpbGlhc3VhdUBvYWtsYW5kLm" +
+                                    "VkdSIsImlzX2FkbWluIjoxLCJpc0xvY2tlZCI6MCwicGFzc3dvcmQiOiJ0ZXN0IiwidXNlcm5hbWUiOiJsaW" +
+                                    "xpYXN1YXUifSwiaWF0IjoxNjA0NTE0NjM4fQ.unXrKNRlQ3h95hSpRDELWQa3R6e4KQfz8atwPmCmsf8")
+
                     .build();
             Response response = client.newCall(request).execute();
             System.out.println(response);
+
+            String resStr = response.body().string();
+            JSONObject json = new JSONObject(resStr);
+
+            System.out.println(json.toString());
+
         }
 
         catch (IOException exc ) {
@@ -113,7 +131,9 @@ public class FaceRecognizer {
         AuthParams params = new AuthParams(path, username);
         try {
             new AuthenticateAsync().execute(params).get();
-            return true;
+            if (status.contains("200")) {
+                return true;
+            }
         }
         catch(Exception exc)
         {
@@ -140,24 +160,41 @@ public class FaceRecognizer {
     public void AuthenticateMethod(File path, String user) throws JSONException {
         try {
 
-            System.out.println(path.getName()); //this is "photo5127015921858211407.jpg"
             System.out.println(user);
 
             OkHttpClient client = new OkHttpClient().newBuilder()
+                    .connectTimeout(50, TimeUnit.SECONDS)
+                    .writeTimeout(50, TimeUnit.SECONDS)
+                    .readTimeout(50, TimeUnit.SECONDS)
                     .build();
             MediaType mediaType = MediaType.parse("text/plain");
             RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                    .addFormDataPart("face",path.getName(),
+                    .addFormDataPart("file",path.getName(),
                             RequestBody.create(MediaType.parse("application/octet-stream"),
                                     new File(path.getPath())))
+                    .addFormDataPart("username", user)
+                    .addFormDataPart("type", "face")
+                    .addFormDataPart("method", "authenticate")
                     .build();
             Request request = new Request.Builder()
                     .url(ADDRESS+"upload")
                     .method("POST", body)
-                    //.addHeader("authorization", Server.session_cookie)
+                    .addHeader("authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im" +
+                            "lkIjoxLCJmbmFtZSI6IkxpbHkiLCJsbmFtZSI6IlN1YXUiLCJlbWFpbCI6ImxpbGlhc3VhdUBvYWtsYW5kLm" +
+                            "VkdSIsImlzX2FkbWluIjoxLCJpc0xvY2tlZCI6MCwicGFzc3dvcmQiOiJ0ZXN0IiwidXNlcm5hbWUiOiJsaW" +
+                            "xpYXN1YXUifSwiaWF0IjoxNjA0NTE0NjM4fQ.unXrKNRlQ3h95hSpRDELWQa3R6e4KQfz8atwPmCmsf8")
                     .build();
             Response response = client.newCall(request).execute();
             System.out.println(response);
+            String resStr = response.body().string();
+            JSONObject json = new JSONObject(resStr);
+
+            System.out.println(json.toString());
+
+            String stat = json.getString("status");
+            System.out.println(stat);
+            status = stat;
+
         }
 
         catch (IOException exc ) {
