@@ -128,9 +128,14 @@
         app:srcCompat="@drawable/face" />
 
     <org.opencv.android.JavaCameraView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/javaCamView" />
+        android:id="@+id/javaCamView"
+        android:layout_width="323dp"
+        android:layout_height="225dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.967" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
