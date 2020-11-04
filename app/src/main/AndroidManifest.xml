@@ -19,8 +19,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="Identity Management System"
-            android:screenOrientation="landscape">
+            android:label="Identity Management System">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
