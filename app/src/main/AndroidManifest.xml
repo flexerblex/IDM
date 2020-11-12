@@ -7,8 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
 
     <application
@@ -31,16 +29,15 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LogoutActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".RecordAudioActivity" />
 
         <provider
             android:authorities="idm.idm.provider"
             android:name="androidx.core.content.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/file_paths" />
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
 
     </application>

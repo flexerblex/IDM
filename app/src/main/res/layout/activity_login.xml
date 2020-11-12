@@ -12,6 +12,19 @@
     tools:context="idm.idm.LoginActivity">
 
 
+    <ImageButton
+        android:id="@+id/fingerprintID"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.71"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.472"
+        app:srcCompat="@drawable/fingerprint" />
+
     <EditText
         android:id="@+id/loginUserName"
         android:layout_width="0dp"
@@ -54,10 +67,10 @@
         android:text="LOGIN"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.467" />
+        app:layout_constraintVertical_bias="0.472" />
 
     <TextView
         android:id="@+id/createAccount"
@@ -65,6 +78,7 @@
         android:layout_height="23dp"
         android:layout_marginTop="8dp"
         android:text="CREATE AN ACCOUNT"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,6 +92,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginBottom="284dp"
         android:text="ATTEMPTS REMAINING: 3 "
+        android:textAlignment="center"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,6 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="64dp"
         android:layout_marginBottom="64dp"
         android:visibility="gone"
@@ -97,8 +113,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
-        android:layout_marginLeft="32dp" />
+        app:layout_constraintVertical_bias="0.3" />
 
     <TextView
         android:id="@+id/loginView"
@@ -107,6 +122,7 @@
         android:layout_marginTop="77dp"
         android:layout_marginBottom="26dp"
         android:text="LOGIN"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/loginUserName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -116,15 +132,13 @@
         android:id="@+id/faceID"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginTop="31dp"
-        android:layout_marginBottom="15dp"
         android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/password"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.914"
+        app:layout_constraintHorizontal_bias="0.289"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginUserName"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.471"
         app:srcCompat="@drawable/face" />
 
     <org.opencv.android.JavaCameraView
