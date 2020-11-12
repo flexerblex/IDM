@@ -10,4 +10,8 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="welcome_to_idm_project">Welcome to IDM Project</string>
+    <string name="record_audio" />
+    <string name="record">record</string>
+    <string name="stop">stop</string>
+
 </resources>
