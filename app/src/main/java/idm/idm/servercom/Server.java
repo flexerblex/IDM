@@ -51,7 +51,6 @@ public class Server {
             if(status.contains("200")) {
                 return true;
             }
-
         }
         catch(Exception exc)
         {

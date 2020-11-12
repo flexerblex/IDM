@@ -183,16 +183,24 @@ public class LoginActivity extends AppCompatActivity implements CameraBridgeView
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String username = "Dummy";
+        String username = Name.getText().toString();
 
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
             if (FaceRecognizer.FACERECOGNIZER.Authenticate(imageFile, username)) {
                 Intent toHome2 = new Intent(LoginActivity.this, HomeActivity.class);
+                toHome2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(toHome2);
             }
             else {
                 System.out.println("Error authenticating.");
+                counter--;
+
+                Info.setText("Attempts Remaining: " + String.valueOf(counter));
+                if(counter == 0){
+                    Login.setEnabled(false);
+                    Info.setText("Try again later.");
+                }
             }
         }
     }
