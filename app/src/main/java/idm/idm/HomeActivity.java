@@ -47,6 +47,10 @@ public class HomeActivity extends AppCompatActivity {
             Name.setText(Server.firstName);
         }
 
+        else if (FaceRecognizer.name != null) {
+            Name.setText(FaceRecognizer.name);
+        }
+
         Face = (ImageButton)findViewById(R.id.faceRegister);
         //Fingerprint = (Button)findViewById(R.id.fingerprintRegister);
         Voice = (ImageButton)findViewById(R.id.voiceRegister);

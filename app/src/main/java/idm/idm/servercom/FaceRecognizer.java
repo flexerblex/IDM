@@ -1,6 +1,9 @@
 package idm.idm.servercom;
 
 import android.os.AsyncTask;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -33,6 +37,7 @@ public class FaceRecognizer {
     private URL url;
 
     private static String status;
+    public static String name;
 
     public static class AuthParams {
         File file;
@@ -88,6 +93,7 @@ public class FaceRecognizer {
         try {
 
             System.out.println(path.getName()); //this is "photo5127015921858211407.jpg"
+            System.out.println(Server.firstName);
 
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
@@ -96,19 +102,13 @@ public class FaceRecognizer {
                     .addFormDataPart("file",path.getName(),
                             RequestBody.create(MediaType.parse("application/octet-stream"),
                                     new File(path.getPath())))
-                    .addFormDataPart("username", "admin") //will replace with user when endpoint is complete
+                    .addFormDataPart("username", Server.firstName) //will replace with user when endpoint is complete
                     .addFormDataPart("type", "face")
                     .addFormDataPart("method", "create")
                     .build();
             Request request = new Request.Builder()
                     .url(ADDRESS+"upload")
                     .method("POST", body)
-//                    .addHeader("authorization", Server.session_cookie)
-                    .addHeader("authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im" +
-                            "lkIjoxLCJmbmFtZSI6IkxpbHkiLCJsbmFtZSI6IlN1YXUiLCJlbWFpbCI6ImxpbGlhc3VhdUBvYWtsYW5kLm" +
-                                    "VkdSIsImlzX2FkbWluIjoxLCJpc0xvY2tlZCI6MCwicGFzc3dvcmQiOiJ0ZXN0IiwidXNlcm5hbWUiOiJsaW" +
-                                    "xpYXN1YXUifSwiaWF0IjoxNjA0NTE0NjM4fQ.unXrKNRlQ3h95hSpRDELWQa3R6e4KQfz8atwPmCmsf8")
-
                     .build();
             Response response = client.newCall(request).execute();
             System.out.println(response);
@@ -143,6 +143,7 @@ public class FaceRecognizer {
     }
 
     private class AuthenticateAsync extends AsyncTask<AuthParams, Integer, JSONObject> {
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected JSONObject doInBackground(AuthParams... authParams) {
             String user = authParams[0].username;
@@ -157,6 +158,7 @@ public class FaceRecognizer {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void AuthenticateMethod(File path, String user) throws JSONException {
         try {
 
@@ -179,10 +181,6 @@ public class FaceRecognizer {
             Request request = new Request.Builder()
                     .url(ADDRESS+"upload")
                     .method("POST", body)
-                    .addHeader("authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im" +
-                            "lkIjoxLCJmbmFtZSI6IkxpbHkiLCJsbmFtZSI6IlN1YXUiLCJlbWFpbCI6ImxpbGlhc3VhdUBvYWtsYW5kLm" +
-                            "VkdSIsImlzX2FkbWluIjoxLCJpc0xvY2tlZCI6MCwicGFzc3dvcmQiOiJ0ZXN0IiwidXNlcm5hbWUiOiJsaW" +
-                            "xpYXN1YXUifSwiaWF0IjoxNjA0NTE0NjM4fQ.unXrKNRlQ3h95hSpRDELWQa3R6e4KQfz8atwPmCmsf8")
                     .build();
             Response response = client.newCall(request).execute();
             System.out.println(response);
@@ -192,12 +190,41 @@ public class FaceRecognizer {
             System.out.println(json.toString());
 
             String stat = json.getString("status");
-            System.out.println(stat);
+            String token = json.getString("token");
+
+            DecodeJWT(token);
             status = stat;
 
         }
 
         catch (IOException exc ) {
+            System.out.println(exc.getMessage());
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void DecodeJWT(String tokenString) {
+        try {
+
+            String[] split_string = tokenString.split("\\.");
+            String base64EncodedBody = split_string[1];
+
+            String body = new String(Base64.getUrlDecoder().decode(base64EncodedBody));
+
+            System.out.println(body);
+
+            JSONObject jsonObject = new JSONObject(body);
+
+            String user = jsonObject.getString("user");
+            System.out.println(user);
+
+            JSONObject jsonObject2 = new JSONObject(user);
+            name = jsonObject2.getString("fname");
+            System.out.println(name);
+
+        }
+        catch(Exception exc)
+        {
             System.out.println(exc.getMessage());
         }
     }
