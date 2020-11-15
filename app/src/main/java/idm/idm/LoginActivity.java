@@ -47,7 +47,8 @@ import java.io.IOException;
 import idm.idm.servercom.FaceRecognizer;
 import idm.idm.servercom.Server;
 
-public class LoginActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2  {
+public class LoginActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2
+ {
 
     private EditText Name;
     private EditText Password;

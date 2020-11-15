@@ -75,6 +75,16 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Voice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this,RecordAudioActivity.class));
+            }
+        });
+
+
+
     }
 
     @Override
