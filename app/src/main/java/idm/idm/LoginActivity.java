@@ -260,8 +260,7 @@ public class LoginActivity extends AppCompatActivity implements CameraBridgeView
         }
     }
 
-
-    //Camera
+      //Camera
     @Override
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat();
