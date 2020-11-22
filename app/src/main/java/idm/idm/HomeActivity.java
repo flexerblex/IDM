@@ -52,8 +52,8 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         Face = (ImageButton)findViewById(R.id.faceRegister);
-        Fingerprint = (Button)findViewById(R.id.fingerprintRegister);
-        Voice = (ImageButton)findViewById(R.id.vocalRegister);
+        Fingerprint = (ImageButton)findViewById(R.id.fingerprintRegister);
+        Voice = (ImageButton)findViewById(R.id.voiceRegister);
         Voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
