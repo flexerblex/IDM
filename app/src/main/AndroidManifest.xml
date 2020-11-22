@@ -20,7 +20,7 @@
         <activity
             android:name=".LoginActivity"
             android:label="Identity Management System"
-            android:screenOrientation="landscape">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
