@@ -3,7 +3,9 @@ package idm.idm;
 import android.content.Context;
 import android.content.Intent;
 //import android.icu.text.SimpleDateFormat;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,8 +26,12 @@ import java.io.InputStream;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import org.json.JSONException;
@@ -43,6 +50,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.IOException;
+import java.util.concurrent.Executor;
 
 import idm.idm.servercom.FaceRecognizer;
 import idm.idm.servercom.Server;
@@ -54,6 +62,10 @@ public class LoginActivity extends AppCompatActivity implements CameraBridgeView
     private TextView Info;
     private Button Login;
     private ImageButton LoginFace;
+    private ImageButton LoginFingerprint;
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
     private TextView Create;
     private int counter = 3;
     private Date lockTime;
@@ -77,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements CameraBridgeView
 
         Login = (Button)findViewById(R.id.loginButton);
         LoginFace = (ImageButton)findViewById((R.id.faceID));
+        LoginFingerprint = (ImageButton)findViewById(R.id.fingerprintID);
         Create = (TextView) findViewById(R.id.createAccount);
 
         javaCameraView = (JavaCameraView)findViewById(R.id.javaCamView);
@@ -108,6 +121,56 @@ public class LoginActivity extends AppCompatActivity implements CameraBridgeView
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        executor = ContextCompat.getMainExecutor(this);
+        biometricPrompt = new BiometricPrompt(LoginActivity.this,
+                executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode,
+                                              @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Toast.makeText(getApplicationContext(),
+                        "Authentication error: " + errString, Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            public void onAuthenticationSucceeded(
+                    @NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+                String username = prefs.getString("username","");
+                String pwd = prefs.getString("password","");
+                if (username.equals("")) {
+                    Toast.makeText(getApplicationContext(),
+                            "Error: User has not set up Fingerprint yet", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                else {
+                    validID(username, pwd);
+                }
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getApplicationContext(), "Authentication failed",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Login using your fingerprint")
+                .setNegativeButtonText("Cancel")
+                .build();
+
+        LoginFingerprint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                biometricPrompt.authenticate(promptInfo);
             }
         });
 
@@ -183,29 +246,20 @@ public class LoginActivity extends AppCompatActivity implements CameraBridgeView
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String username = Name.getText().toString();
+        String username = "Dummy";
 
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
             if (FaceRecognizer.FACERECOGNIZER.Authenticate(imageFile, username)) {
                 Intent toHome2 = new Intent(LoginActivity.this, HomeActivity.class);
-                toHome2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(toHome2);
             }
             else {
                 System.out.println("Error authenticating.");
-                counter--;
-
-                Info.setText("Attempts Remaining: " + String.valueOf(counter));
-                if(counter == 0){
-                    Login.setEnabled(false);
-                    Info.setText("Try again later.");
-                }
             }
         }
     }
 
-  
       //Camera
     @Override
     public void onCameraViewStarted(int width, int height) {
@@ -278,5 +332,4 @@ public class LoginActivity extends AppCompatActivity implements CameraBridgeView
 
         }
     };
-
 }

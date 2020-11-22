@@ -1,5 +1,6 @@
 package idm.idm.servercom;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -27,6 +28,8 @@ import io.jsonwebtoken.security.Keys;
 import okhttp3.OkHttpClient;
 import okhttp3.*;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Lily
  * Used to make requests to a server.
@@ -41,6 +44,9 @@ public class Server {
     public  static String session_cookie;
 
     public static String firstName;
+    public static String id;
+    public static String username;
+    public static String password;
 
     private static String status;
 
@@ -51,6 +57,7 @@ public class Server {
             if(status.contains("200")) {
                 return true;
             }
+
         }
         catch(Exception exc)
         {
@@ -183,7 +190,10 @@ public class Server {
             System.out.println(user);
 
             JSONObject jsonObject2 = new JSONObject(user);
+            id = jsonObject2.getString("id");
             firstName = jsonObject2.getString("fname");
+            username = jsonObject2.getString("username");
+            password = jsonObject2.getString("password");
             System.out.println(firstName);
 
         }
