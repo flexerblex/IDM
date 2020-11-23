@@ -61,8 +61,8 @@ public class LoginActivity extends AppCompatActivity  {
     private EditText Password;
     private TextView Info;
     private Button Login;
-    private ImageButton LoginFace;
-    private ImageButton LoginFingerprint;
+    private Button LoginFace;
+    private Button LoginFingerprint;
     private Executor executor;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
@@ -88,8 +88,8 @@ public class LoginActivity extends AppCompatActivity  {
         Info = (TextView)findViewById(R.id.logInfo);
 
         Login = (Button)findViewById(R.id.loginButton);
-        LoginFace = (ImageButton)findViewById((R.id.faceID));
-        LoginFingerprint = (ImageButton)findViewById(R.id.fingerprintID);
+        LoginFace = (Button)findViewById((R.id.faceID));
+        LoginFingerprint = (Button)findViewById(R.id.fingerprintID);
         Create = (TextView) findViewById(R.id.createAccount);
 
         //javaCameraView = (JavaCameraView)findViewById(R.id.javaCamView);

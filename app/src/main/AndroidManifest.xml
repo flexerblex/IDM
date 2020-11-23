@@ -13,13 +13,13 @@
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@drawable/i"
-        android:label="Identity Management System"
+        android:label="CapID"
         android:roundIcon="@drawable/i"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="Identity Management System"
+            android:label="CapID"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,6 +40,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
     </application>
 
