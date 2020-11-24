@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -23,6 +25,7 @@ public class RecordAudioActivity extends AppCompatActivity {
     Button StartRecording, StopRecording;
     String pathSave = "";
     MediaRecorder mediaRecorder;
+    private TextView Cancel;
 
     final int REQUEST_PERMISSION_CODE = 786;
 
@@ -32,8 +35,9 @@ public class RecordAudioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_record_audio);
 
         if (checkPermission()) requestPermission();
-        StartRecording = findViewById(R.id.button);
-        StopRecording = findViewById(R.id.button2);
+        StartRecording = (Button)findViewById(R.id.button);
+        StopRecording = (Button)findViewById(R.id.button2);
+        Cancel = (TextView) findViewById(R.id.cancel);
 
         StartRecording.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +65,14 @@ public class RecordAudioActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mediaRecorder.stop();
                 StopRecording.setEnabled(false);
+            }
+        });
+
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toRegister = new Intent(RecordAudioActivity.this, HomeActivity.class);
+                startActivity(toRegister);
             }
         });
 

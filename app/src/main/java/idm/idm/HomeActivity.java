@@ -2,29 +2,18 @@ package idm.idm;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.security.KeyPairGeneratorSpec;
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyProperties;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,21 +23,8 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.util.Base64;
 import java.util.concurrent.Executor;
 
 import idm.idm.servercom.FaceRecognizer;
@@ -57,9 +33,9 @@ import idm.idm.servercom.Server;
 public class HomeActivity extends AppCompatActivity {
 
     private TextView Name;
-    private ImageButton Face;
-    private ImageButton Fingerprint;
-    private ImageButton Voice;
+    private Button Face;
+    private Button Fingerprint;
+    private Button Voice;
     private String currentPhotoPath;
     private File imageFile;
     private Executor executor;
@@ -117,9 +93,9 @@ public class HomeActivity extends AppCompatActivity {
                 .setNegativeButtonText("Cancel")
                 .build();
 
-        Face = (ImageButton)findViewById(R.id.faceRegister);
-        Fingerprint = (ImageButton)findViewById(R.id.fingerprintRegister);
-        Voice = (ImageButton)findViewById(R.id.voiceRegister);
+        Face = (Button)findViewById(R.id.faceID);
+        Fingerprint = (Button)findViewById(R.id.fingerprintRegister);
+        Voice = (Button)findViewById(R.id.voiceRegister);
 
         Face.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,6 +126,13 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 biometricPrompt.authenticate(promptInfo);
+            }
+        });
+
+        Voice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, RecordAudioActivity.class));
             }
         });
 
