@@ -74,5 +74,13 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toLogin = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(toLogin);
+            }
+        });
+
     }
 }
