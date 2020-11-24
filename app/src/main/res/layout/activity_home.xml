@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     android:layout_gravity="center">
 
+    <Button
+        android:id="@+id/buttonLogOut2"
+        android:layout_width="118dp"
+        android:layout_height="48dp"
+        android:text="LogOut"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="146dp"
+        tools:layout_editor_absoluteY="419dp"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/welcomeText"
         android:layout_width="120dp"

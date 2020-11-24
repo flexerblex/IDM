@@ -36,6 +36,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button Face;
     private Button Fingerprint;
     private Button Voice;
+    private Button Logout;
     private String currentPhotoPath;
     private File imageFile;
     private Executor executor;
