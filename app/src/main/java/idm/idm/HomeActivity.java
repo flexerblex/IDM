@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,9 +33,9 @@ import idm.idm.servercom.Server;
 public class HomeActivity extends AppCompatActivity {
 
     private TextView Name;
-    private ImageButton Face;
-    private ImageButton Fingerprint;
-    private ImageButton Voice;
+    private Button Face;
+    private Button Fingerprint;
+    private Button Voice;
     private String currentPhotoPath;
     private File imageFile;
     private Executor executor;
@@ -92,9 +93,9 @@ public class HomeActivity extends AppCompatActivity {
                 .setNegativeButtonText("Cancel")
                 .build();
 
-        Face = (ImageButton)findViewById(R.id.faceID);
-        Fingerprint = (ImageButton)findViewById(R.id.fingerprintRegister);
-        Voice = (ImageButton)findViewById(R.id.voiceRegister);
+        Face = (Button)findViewById(R.id.faceID);
+        Fingerprint = (Button)findViewById(R.id.fingerprintRegister);
+        Voice = (Button)findViewById(R.id.voiceRegister);
 
         Face.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +126,13 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 biometricPrompt.authenticate(promptInfo);
+            }
+        });
+
+        Voice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, RecordAudioActivity.class));
             }
         });
 

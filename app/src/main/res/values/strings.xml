@@ -11,7 +11,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="welcome_to_idm_project">Welcome to IDM Project</string>
     <string name="record_audio" />
-    <string name="record">record</string>
-    <string name="stop">stop</string>
+    <string name="record">start</string>
+    <string name="register">register</string>
 
 </resources>

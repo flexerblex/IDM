@@ -7,24 +7,11 @@
     android:layout_height="match_parent"
     android:layout_gravity="center">
 
-    <ImageButton
-        android:id="@+id/fingerprintRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.884"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/fingerprint100" />
-
     <TextView
         android:id="@+id/welcomeText"
         android:layout_width="120dp"
         android:layout_height="31dp"
+        android:fontFamily="@font/sarala"
         android:text="Welcome,"
         android:textAlignment="center"
         android:textSize="18sp"
@@ -33,13 +20,14 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.097" />
+        app:layout_constraintVertical_bias="0.154" />
 
     <TextView
         android:id="@+id/personName"
         android:layout_width="183dp"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/sarala"
         android:text="Admin!"
         android:textAlignment="center"
         android:textSize="18sp"
@@ -50,10 +38,23 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
+        android:id="@+id/textView3"
+        android:layout_width="339dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="14dp"
+        android:text="______________________________________________________"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/personName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="291dp"
         android:layout_height="24dp"
         android:layout_marginTop="60dp"
+        android:fontFamily="@font/sarala"
         android:text="REGISTER BIOMETRIC DATA"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,32 +63,55 @@
         app:layout_constraintTop_toBottomOf="@+id/personName"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageButton
+    <Button
         android:id="@+id/faceID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:background="#FFFFFF"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="331dp"
+        android:layout_height="44dp"
+        android:layout_gravity="start"
+        android:background="@drawable/rounded_btn"
+        android:backgroundTint="#FF009688"
+        android:enabled="true"
+        android:fontFamily="@font/sarala"
+        android:text="REGISTER FACEID"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.106"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/face100" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.414" />
 
-    <ImageButton
+    <Button
         android:id="@+id/voiceRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:background="#FFFFFF"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="331dp"
+        android:layout_height="44dp"
+        android:layout_gravity="start"
+        android:background="@drawable/rounded_btn"
+        android:backgroundTint="#FF009688"
+        android:enabled="true"
+        android:fontFamily="@font/sarala"
+        android:text="REGISTER VOICE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/voice100" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.595" />
+
+    <Button
+        android:id="@+id/fingerprintRegister"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="331dp"
+        android:layout_height="44dp"
+        android:layout_gravity="start"
+        android:background="@drawable/rounded_btn"
+        android:backgroundTint="#FF009688"
+        android:enabled="true"
+        android:fontFamily="@font/sarala"
+        android:text="REGISTER FINGERPRINT"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.505" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
