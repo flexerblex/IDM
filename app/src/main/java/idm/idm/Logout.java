@@ -9,22 +9,22 @@ public class Logout {
     private Button Logout;
 
 
-    @Override
+    //@Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logout);
-
-
-        Logout = (Button)findViewById(R.id.buttonLogOut);
-        Logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //kill token
-                //redirect to LoginActivity
-
-                System.out.println("logged out");
-            }
-        });
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_logout);
+//
+//
+//        Logout = (Button) findViewById(R.id.buttonLogOut2);
+//        Logout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //kill token
+//                //redirect to LoginActivity
+//
+//                System.out.println("logged out");
+//            }
+//        });
 
     }
 
