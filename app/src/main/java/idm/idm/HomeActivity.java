@@ -37,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button Fingerprint;
     private Button Voice;
     private Button Logout;
+    private Button EditProfile;
     private String currentPhotoPath;
     private File imageFile;
     private Executor executor;
@@ -97,6 +98,8 @@ public class HomeActivity extends AppCompatActivity {
         Face = (Button)findViewById(R.id.faceID);
         Fingerprint = (Button)findViewById(R.id.fingerprintRegister);
         Voice = (Button)findViewById(R.id.voiceRegister);
+        Logout = (Button)findViewById(R.id.logout);
+        EditProfile = (Button)findViewById(R.id.editProfile);
 
         Face.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +137,22 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, RecordAudioActivity.class));
+            }
+        });
+
+        Logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Server.session_cookie = "";
+                Toast.makeText(HomeActivity.this, "Logout Successful", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            }
+        });
+
+        EditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, EditActivity.class));
             }
         });
 
