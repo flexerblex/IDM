@@ -274,6 +274,7 @@ public class Server {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             conn.setRequestProperty("Accept","application/json");
+            conn.setRequestProperty("Authorization", session_cookie);
             conn.setDoOutput(true);
             conn.setDoInput(true);
 
