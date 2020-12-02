@@ -44,7 +44,9 @@ public class Server {
     public  static String session_cookie;
 
     public static String firstName;
+    public static String lastName;
     public static String id;
+    public static String email;
     public static String username;
     public static String password;
 
@@ -75,12 +77,42 @@ public class Server {
         }
     }
 
+    public boolean update(JSONObject user)
+    {
+        try {
+            new UpdateRequest().execute(user.toString());
+            if(status.contains("200")) {
+                return true;
+            }
+        }
+        catch(Exception exc)
+        {
+            System.out.println(exc.getMessage());
+        }
+        return false;
+    }
+
     private class registerRequest extends AsyncTask<String, Integer, JSONObject> {
 
         @Override
         protected JSONObject doInBackground(String... strings) {
             try {
                 registerTask(strings[0]);
+            }
+            catch(JSONException e) {
+                System.out.println(e.getMessage());
+                System.exit(1);
+            }
+            return null;
+        }
+    }
+
+    private class UpdateRequest extends AsyncTask<String, Integer, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+            try {
+                updateTask(strings[0]);
             }
             catch(JSONException e) {
                 System.out.println(e.getMessage());
@@ -194,6 +226,8 @@ public class Server {
             firstName = jsonObject2.getString("fname");
             username = jsonObject2.getString("username");
             password = jsonObject2.getString("password");
+            lastName = jsonObject2.getString("lname");
+            email = jsonObject2.getString("email");
             System.out.println(firstName);
 
         }
@@ -214,6 +248,33 @@ public class Server {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             conn.setRequestProperty("Accept","application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+
+            DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+            wr.writeBytes(JSON);
+            wr.flush();
+            wr.close();
+
+            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+            Log.i("MSG" , conn.getResponseMessage());
+
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void updateTask (String JSON) throws JSONException {
+        try {
+            Log.i("JSON", JSON);
+            url = new URL(ADDRESS+"update");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            conn.setRequestProperty("Accept","application/json");
+            conn.setRequestProperty("Authorization", session_cookie);
             conn.setDoOutput(true);
             conn.setDoInput(true);
 
