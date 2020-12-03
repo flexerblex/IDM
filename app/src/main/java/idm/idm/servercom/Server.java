@@ -49,6 +49,7 @@ public class Server {
     public static String email;
     public static String username;
     public static String password;
+    public static Integer isAdmin;
 
     private static String status;
 
@@ -228,7 +229,9 @@ public class Server {
             password = jsonObject2.getString("password");
             lastName = jsonObject2.getString("lname");
             email = jsonObject2.getString("email");
+            isAdmin = jsonObject2.getInt("is_admin");
             System.out.println(firstName);
+            System.out.println(isAdmin);
 
         }
         catch(Exception exc)

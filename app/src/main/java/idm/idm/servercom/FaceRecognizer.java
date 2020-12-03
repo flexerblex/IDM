@@ -52,8 +52,10 @@ public class FaceRecognizer {
     // used to register FaceID for the first time
     public boolean Upload(File path)
     {
+        System.out.println("hit upload async method!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         try {
             new UploadAsync().execute(path).get();
+            return true;
         }
         catch(Exception exc)
         {
@@ -102,7 +104,7 @@ public class FaceRecognizer {
                     .addFormDataPart("file",path.getName(),
                             RequestBody.create(MediaType.parse("application/octet-stream"),
                                     new File(path.getPath())))
-                    .addFormDataPart("username", Server.firstName) //will replace with user when endpoint is complete
+                    .addFormDataPart("username", Server.username)
                     .addFormDataPart("type", "face")
                     .addFormDataPart("method", "create")
                     .build();

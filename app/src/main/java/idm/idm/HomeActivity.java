@@ -37,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button Fingerprint;
     private Button Voice;
     private Button Logout;
+    private Button ViewUsers;
     private Button EditProfile;
     private String currentPhotoPath;
     private File imageFile;
@@ -100,6 +101,12 @@ public class HomeActivity extends AppCompatActivity {
         Voice = (Button)findViewById(R.id.voiceRegister);
         Logout = (Button)findViewById(R.id.logout);
         EditProfile = (Button)findViewById(R.id.editProfile);
+        ViewUsers = (Button)findViewById(R.id.viewUsers);
+        if (Server.isAdmin == 0){
+            ViewUsers.setVisibility(View.GONE);
+        }else {
+            ViewUsers.setVisibility(View.VISIBLE);
+        }
 
         Face.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,6 +162,15 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, EditActivity.class));
             }
         });
+
+        if (Server.isAdmin == 1) {
+            ViewUsers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(HomeActivity.this, UsersActivity.class));
+                }
+            });
+        }
 
     }
 
