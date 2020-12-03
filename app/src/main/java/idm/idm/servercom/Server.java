@@ -227,7 +227,8 @@ public class Server {
             firstName = jsonObject2.getString("fname");
             username = jsonObject2.getString("username");
             password = jsonObject2.getString("password");
-            //            isAdmin = jsonObject2.getString("is_admin");
+            lastName = jsonObject2.getString("lname");
+            email = jsonObject2.getString("email");
             isAdmin = jsonObject2.getInt("is_admin");
             System.out.println(firstName);
             System.out.println(isAdmin);
