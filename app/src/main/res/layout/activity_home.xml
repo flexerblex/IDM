@@ -24,7 +24,7 @@
         android:layout_height="46dp"
         android:layout_gravity="start"
         android:background="@drawable/rounded_btn"
-        android:backgroundTint="#992196F3"
+        android:backgroundTint="#57ADF3"
         android:enabled="true"
         android:fontFamily="@font/sarala"
         android:text="View Users"
