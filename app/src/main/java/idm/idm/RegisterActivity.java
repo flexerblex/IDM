@@ -33,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         Username = (EditText)findViewById(R.id.userName);
         Email = (EditText)findViewById(R.id.emailAddress);
-        FirstName = (EditText)findViewById(R.id.lastName);
+        FirstName = (EditText)findViewById(R.id.firstName);
         LastName = (EditText)findViewById(R.id.lastName);
         Password = (EditText)findViewById(R.id.password);
         Confirmation = (EditText)findViewById(R.id.conPassword);

@@ -55,6 +55,10 @@ public class HomeActivity extends AppCompatActivity {
             Name.setText(Server.firstName);
         }
 
+        if (Server.isAdmin == null) {
+            Server.isAdmin = 0;
+        }
+
         executor = ContextCompat.getMainExecutor(this);
         biometricPrompt = new BiometricPrompt(HomeActivity.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
