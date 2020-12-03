@@ -246,7 +246,7 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String username = "Dummy";
+        String username = Name.getText().toString();
 
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
