@@ -1,42 +1,41 @@
 package idm.idm;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
 
-import idm.idm.servercom.Server;
+import idm.idm.model.User;
 
 public class UsersActivity extends AppCompatActivity {
 
-    private TextView Name;
-    private TextView Cancel;
-
     @Override
-    protected void onCreate(Bundle savedInstancesState) {
-        super.onCreate(savedInstancesState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
-        //Username = (EditText)findViewById(R.id.userName);
+        ListView mListView = (ListView) findViewById(R.id.listView);
 
-        Cancel = (TextView) findViewById(R.id.cancel);
+        User lily = new User("Lilia", "Suau",  "liliasuau");
+        User lexy = new User("Lexy", "Pan",  "lexypan");
+        ArrayList<User> userList = new ArrayList<>();
 
-        Cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(UsersActivity.this, HomeActivity.class));
-            }
-        });
+        //Add the Person objects to an ArrayList
+        userList.add(lily);
+        userList.add(lexy);
 
+        UsersAdapter adapter = new UsersAdapter(this, R.layout.adapter_users, userList);
+        mListView.setAdapter(adapter);
 
     }
+
 }
