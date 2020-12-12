@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 
+import idm.idm.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -50,6 +51,7 @@ public class Server {
     public static String username;
     public static String password;
     public static Integer isAdmin;
+    public static Integer isLocked;
 
     private static String status;
 
@@ -297,8 +299,7 @@ public class Server {
             lastName = jsonObject2.getString("lname");
             email = jsonObject2.getString("email");
             isAdmin = jsonObject2.getInt("is_admin");
-            System.out.println(firstName);
-            System.out.println(isAdmin);
+            isLocked = jsonObject2.getInt("isLocked");
 
         }
         catch(Exception exc)
