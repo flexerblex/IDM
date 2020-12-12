@@ -36,6 +36,7 @@ import androidx.core.content.FileProvider;
 
 import org.json.JSONException;
 
+import org.json.JSONObject;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 //import org.opencv.android.JavaCameraView;
@@ -212,11 +213,26 @@ public class LoginActivity extends AppCompatActivity  {
             //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             if(counter == 0){
-                lockTime = new Date();
+               try {
+
+                   JSONObject Lock = new JSONObject();
+                   Lock.put("username", Name.getText().toString());
+                   Lock.put("task", "lock");
+                   //Server.SERVER.Lock("Lock");
+                   Server.SERVER.Lock(Name.getText().toString());
+                   System.out.println("marker");
+               }
+               catch (JSONException e) {
+                   e.printStackTrace();
+               }
+               // lockTime = new Date();
+                //Server.SERVER.login(userName,userPass)){
+
+                }
                 //Login.setEnabled(false);
-                Info.setText("Try 2 minutes later.");
+                Info.setText("You've");
             }
-            else if (counter < 0) {
+          /*  else if (counter < 0) {
 
                 Date currentTime = new Date();
                 long remainingTime = currentTime.getTime() - lockTime.getTime();
@@ -235,11 +251,12 @@ public class LoginActivity extends AppCompatActivity  {
                 }
                 else {
                     //Login.setEnabled(false);
-                    Info.setText("Try " + String.valueOf(minutes) + " minutes later.");
+                    Info.setText("You've been locked out");
                 }
             }
+*/
         }
-    }
+   //}
 
 
     @Override
