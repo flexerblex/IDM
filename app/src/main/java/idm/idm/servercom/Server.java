@@ -71,30 +71,6 @@ public class Server {
         return false;
     }
 
-    public void Lock(String lockuser) {
-        try {
-            new lockRequest().execute(lockuser.toString());
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private class lockRequest extends AsyncTask<String, Integer, JSONObject> {
-
-        @Override
-        protected JSONObject doInBackground(String... strings) {
-            try {
-                lockTask(strings[0]);
-            }
-            catch(JSONException e) {
-                System.out.println(e.getMessage());
-                System.exit(1);
-            }
-            return null;
-        }
-    }
-
     private class LoginRequest extends AsyncTask<String, Integer, JSONObject>
     {
 
@@ -208,6 +184,63 @@ public class Server {
         }
     }
 
+    private void registerTask (String JSON) throws JSONException {
+
+        try {
+
+            Log.i("JSON", JSON);
+
+            url = new URL(ADDRESS+"register");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            conn.setRequestProperty("Accept","application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+
+            DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+            wr.writeBytes(JSON);
+            wr.flush();
+            wr.close();
+
+            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+            Log.i("MSG" , conn.getResponseMessage());
+
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Lock ////////////////////////////////////////////////////////////////////////////////////////////////////////
+     */
+
+    public void Lock(String lockuser) {
+        try {
+            new lockRequest().execute(lockuser);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private class lockRequest extends AsyncTask<String, Integer, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+            try {
+                lockTask(strings[0]);
+            }
+            catch(JSONException e) {
+                System.out.println(e.getMessage());
+                System.exit(1);
+            }
+            return null;
+        }
+    }
+
     private void lockTask (String username) throws JSONException {
 
         try {
@@ -244,40 +277,8 @@ public class Server {
 
             System.out.println("Response: " + response.toString());
 
-            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-            Log.i("MSG" , conn.getResponseMessage());
-
             conn.disconnect();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void registerTask (String JSON) throws JSONException {
-
-        try {
-
-            Log.i("JSON", JSON);
-
-            url = new URL(ADDRESS+"register");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            conn.setRequestProperty("Accept","application/json");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-
-            DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-            wr.writeBytes(JSON);
-            wr.flush();
-            wr.close();
-
-            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-            Log.i("MSG" , conn.getResponseMessage());
-
-            conn.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
         }
