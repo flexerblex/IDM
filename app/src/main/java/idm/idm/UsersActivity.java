@@ -1,8 +1,11 @@
 package idm.idm;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.RequiresApi;
@@ -25,6 +28,7 @@ public class UsersActivity extends AppCompatActivity {
 
     private final String ADDRESS = "http://3.128.46.46/";
     ArrayList<User> userList = new ArrayList<>();
+    ArrayList<User> userInformation = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,14 @@ public class UsersActivity extends AppCompatActivity {
 
         UsersAdapter adapter = new UsersAdapter(this, R.layout.adapter_users, userList);
         mListView.setAdapter(adapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                Intent iReserver = new Intent(UsersActivity.this, HomeActivity.class);
+                startActivity(iReserver);
+            }
+        });
 
     }
 
@@ -115,13 +127,15 @@ public class UsersActivity extends AppCompatActivity {
             String username = arr.getJSONObject(i).getString("username");
             String fname = arr.getJSONObject(i).getString("fname");
             String lname = arr.getJSONObject(i).getString("lname");
+            String email = arr.getJSONObject(i).getString("email");
             Integer isLocked = arr.getJSONObject(i).getInt("isLocked");
             Integer is_admin = arr.getJSONObject(i).getInt("is_admin");
 
             User user = new User(fname, lname, username);
+            User information = new User(fname, lname, username, email, isLocked, is_admin);
             userList.add(user);
+            userInformation.add(information);
         }
-        System.out.println(userList.toString());
     }
 
 }

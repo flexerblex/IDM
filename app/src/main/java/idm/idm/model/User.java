@@ -10,11 +10,22 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    private Integer isAdmin;
+    private Integer isLocked;
 
     public User(String firstName, String lastName, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
+    }
+
+    public User(String firstName, String lastName, String username, String email, Integer isAdmin, Integer isLocked) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
+        this.isAdmin = isAdmin;
+        this.isLocked = isLocked;
     }
 
     public String getUsername() { return username; }
@@ -38,6 +49,20 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public Integer getIsAdmin()  { return isAdmin; }
+
+    public void setIsAdmin(Integer isAdmin) { this.isAdmin = isAdmin; }
+
+    public Integer getIsLocked()  { return isLocked; }
+
+    public void setIsLocked(Integer isLocked) { this.isLocked = isLocked; }
+
+
 
 }
 
