@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 
+import idm.idm.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -50,6 +51,7 @@ public class Server {
     public static String username;
     public static String password;
     public static Integer isAdmin;
+    public static Integer isLocked;
 
     private static String status;
 
@@ -67,60 +69,6 @@ public class Server {
             System.out.println(exc.getMessage());
         }
         return false;
-    }
-
-    public void register(JSONObject postData) {
-        try {
-            new registerRequest().execute(postData.toString());
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public boolean update(JSONObject user)
-    {
-        try {
-            new UpdateRequest().execute(user.toString());
-            if(status.contains("200")) {
-                return true;
-            }
-        }
-        catch(Exception exc)
-        {
-            System.out.println(exc.getMessage());
-        }
-        return false;
-    }
-
-    private class registerRequest extends AsyncTask<String, Integer, JSONObject> {
-
-        @Override
-        protected JSONObject doInBackground(String... strings) {
-            try {
-                registerTask(strings[0]);
-            }
-            catch(JSONException e) {
-                System.out.println(e.getMessage());
-                System.exit(1);
-            }
-            return null;
-        }
-    }
-
-    private class UpdateRequest extends AsyncTask<String, Integer, JSONObject> {
-
-        @Override
-        protected JSONObject doInBackground(String... strings) {
-            try {
-                updateTask(strings[0]);
-            }
-            catch(JSONException e) {
-                System.out.println(e.getMessage());
-                System.exit(1);
-            }
-            return null;
-        }
     }
 
     private class LoginRequest extends AsyncTask<String, Integer, JSONObject>
@@ -206,37 +154,31 @@ public class Server {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void DecodeJWT() {
+    /**
+     * Register ////////////////////////////////////////////////////////////////////////////////////////////////////////
+     */
+
+    public void register(JSONObject postData) {
         try {
-
-            String[] split_string = session_cookie.split("\\.");
-            String base64EncodedBody = split_string[1];
-
-            String body = new String(Base64.getUrlDecoder().decode(base64EncodedBody));
-
-            System.out.println(body);
-
-            JSONObject jsonObject = new JSONObject(body);
-
-            String user = jsonObject.getString("user");
-            System.out.println(user);
-
-            JSONObject jsonObject2 = new JSONObject(user);
-            id = jsonObject2.getString("id");
-            firstName = jsonObject2.getString("fname");
-            username = jsonObject2.getString("username");
-            password = jsonObject2.getString("password");
-            lastName = jsonObject2.getString("lname");
-            email = jsonObject2.getString("email");
-            isAdmin = jsonObject2.getInt("is_admin");
-            System.out.println(firstName);
-            System.out.println(isAdmin);
-
+            new registerRequest().execute(postData.toString());
         }
-        catch(Exception exc)
-        {
-            System.out.println(exc.getMessage());
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private class registerRequest extends AsyncTask<String, Integer, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+            try {
+                registerTask(strings[0]);
+            }
+            catch(JSONException e) {
+                System.out.println(e.getMessage());
+                System.exit(1);
+            }
+            return null;
         }
     }
 
@@ -269,6 +211,40 @@ public class Server {
 
     }
 
+    /**
+     * Update ////////////////////////////////////////////////////////////////////////////////////////////////////////
+     */
+
+    public boolean update(JSONObject user)
+    {
+        try {
+            new UpdateRequest().execute(user.toString());
+            if(status.contains("200")) {
+                return true;
+            }
+        }
+        catch(Exception exc)
+        {
+            System.out.println(exc.getMessage());
+        }
+        return false;
+    }
+
+    private class UpdateRequest extends AsyncTask<String, Integer, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+            try {
+                updateTask(strings[0]);
+            }
+            catch(JSONException e) {
+                System.out.println(e.getMessage());
+                System.exit(1);
+            }
+            return null;
+        }
+    }
+
     private void updateTask (String JSON) throws JSONException {
         try {
             Log.i("JSON", JSON);
@@ -293,6 +269,42 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * JWT Decoding ////////////////////////////////////////////////////////////////////////////////////////////////////////
+     */
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void DecodeJWT() {
+        try {
+
+            String[] split_string = session_cookie.split("\\.");
+            String base64EncodedBody = split_string[1];
+
+            String body = new String(Base64.getUrlDecoder().decode(base64EncodedBody));
+
+            System.out.println(body);
+
+            JSONObject jsonObject = new JSONObject(body);
+
+            String user = jsonObject.getString("user");
+            System.out.println(user);
+
+            JSONObject jsonObject2 = new JSONObject(user);
+            id = jsonObject2.getString("id");
+            firstName = jsonObject2.getString("fname");
+            username = jsonObject2.getString("username");
+            password = jsonObject2.getString("password");
+            lastName = jsonObject2.getString("lname");
+            email = jsonObject2.getString("email");
+            isAdmin = jsonObject2.getInt("is_admin");
+            isLocked = jsonObject2.getInt("isLocked");
+
+        }
+        catch(Exception exc)
+        {
+            System.out.println(exc.getMessage());
+        }
     }
 }
