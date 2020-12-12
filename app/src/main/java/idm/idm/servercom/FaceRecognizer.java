@@ -52,7 +52,6 @@ public class FaceRecognizer {
     // used to register FaceID for the first time
     public boolean Upload(File path)
     {
-        System.out.println("hit upload async method!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         try {
             new UploadAsync().execute(path).get();
             return true;
