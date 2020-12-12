@@ -248,9 +248,8 @@ public class Server {
             //Log.i("JSON", JSON);
 
             JSONObject json = new JSONObject();
-            json.put("username", username);
+            json.put("user", username);
             json.put("task", "lock");
-
 
             url = new URL(ADDRESS+"manage");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
