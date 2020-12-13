@@ -210,8 +210,6 @@ public class LoginActivity extends AppCompatActivity  {
             counter--;
             Info.setText("ATTEMPTS REMAINING: " + String.valueOf(counter));
 
-            //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
             if(counter == 0){
                try {
 
@@ -225,13 +223,9 @@ public class LoginActivity extends AppCompatActivity  {
                catch (JSONException e) {
                    e.printStackTrace();
                }
-               // lockTime = new Date();
-                //Server.SERVER.login(userName,userPass)){
 
-                }
-                //Login.setEnabled(false);
-                Info.setText("You've");
             }
+        }
           /*  else if (counter < 0) {
 
                 Date currentTime = new Date();

@@ -1,14 +1,19 @@
 package idm.idm;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import idm.idm.model.User;
@@ -55,6 +60,20 @@ public class UsersAdapter extends ArrayAdapter<User> {
             holder.name = (TextView) convertView.findViewById(R.id.userName);
             holder.firstName = (TextView) convertView.findViewById(R.id.firstName);
             holder.lastName = (TextView) convertView.findViewById(R.id.lastName);
+
+
+//            holder.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    String nameText = (holder.name).getText().toString();
+//
+//                    Intent myIntent = new Intent(view.getContext(), HomeActivity.class);
+//                    myIntent.putExtra("otherName", nameText);
+//
+//                    mContext.startActivity(myIntent);
+//                }
+//            });
 
             convertView.setTag(holder);
         }
