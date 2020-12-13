@@ -217,9 +217,9 @@ public class Server {
      * Lock ////////////////////////////////////////////////////////////////////////////////////////////////////////
      */
 
-    public void Lock(String lockuser) {
+    public void Lock(String lockuser, String function) {
         try {
-            new lockRequest().execute(lockuser);
+            new lockRequest().execute(lockuser, function);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -231,7 +231,7 @@ public class Server {
         @Override
         protected JSONObject doInBackground(String... strings) {
             try {
-                lockTask(strings[0]);
+                lockTask(strings[0], strings[1]);
             }
             catch(JSONException e) {
                 System.out.println(e.getMessage());
@@ -241,7 +241,7 @@ public class Server {
         }
     }
 
-    private void lockTask (String username) throws JSONException {
+    private void lockTask (String username, String function) throws JSONException {
 
         try {
 
@@ -249,7 +249,7 @@ public class Server {
 
             JSONObject json = new JSONObject();
             json.put("user", username);
-            json.put("task", "lock");
+            json.put("task", function);
 
             url = new URL(ADDRESS+"manage");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

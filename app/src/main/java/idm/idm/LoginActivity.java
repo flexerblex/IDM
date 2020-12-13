@@ -183,20 +183,6 @@ public class LoginActivity extends AppCompatActivity  {
             }
         });
 
-        //Camera view
-//        if(!OpenCVLoader.initDebug()){
-//            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION,this,baseCallback);
-//        }
-//        else{
-//            try {
-//                baseCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        javaCameraView.setCvCameraViewListener(this);
-
     }
 
     private void validID(String userName, String userPass) {
@@ -210,27 +196,9 @@ public class LoginActivity extends AppCompatActivity  {
             counter--;
             Info.setText("ATTEMPTS REMAINING: " + String.valueOf(counter));
 
-            //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
             if(counter == 0){
-               try {
-
-                   JSONObject Lock = new JSONObject();
-                   Lock.put("username", Name.getText().toString());
-                   Lock.put("task", "lock");
-                   //Server.SERVER.Lock("Lock");
-                   Server.SERVER.Lock(Name.getText().toString());
-                   System.out.println("marker");
-               }
-               catch (JSONException e) {
-                   e.printStackTrace();
-               }
-               // lockTime = new Date();
-                //Server.SERVER.login(userName,userPass)){
-
-
-                //Login.setEnabled(false);
-                Info.setText("You've been locked out");
+                Server.SERVER.Lock(Name.getText().toString(), "lock");
+                Info.setText("You've been locked out.");
             }
             else if (counter < 0) {
 

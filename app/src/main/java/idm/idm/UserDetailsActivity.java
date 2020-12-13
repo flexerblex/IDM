@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import idm.idm.servercom.Server;
 
 public class UserDetailsActivity extends AppCompatActivity {
 
@@ -27,12 +30,12 @@ public class UserDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_userdetails);
 
         Intent intent = getIntent();
-        String username = intent.getStringExtra("name");
+        final String username = intent.getStringExtra("name");
         String fname = intent.getStringExtra("fname");
         String lname = intent.getStringExtra("lname");
         String email = intent.getStringExtra("email");
         Integer isAdmin = intent.getIntExtra("isAdmin", 0);
-        Integer isLocked = intent.getIntExtra("isLocked", 0);
+        final Integer isLocked = intent.getIntExtra("isLocked", 0);
 
         Name = (TextView)findViewById(R.id.fullname);
         Username = (TextView)findViewById(R.id.username);
@@ -47,7 +50,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         Username.setText(username);
         Email.setText(email);
 
-        if (isAdmin == 0) {
+        if (isAdmin == 1) {
             AdminCheck = false;
             GrantText();
         }
@@ -55,7 +58,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             AdminCheck = true;
             RevokeText();
         }
-        if (isLocked == 0) {
+        if (isLocked == 1) {
             StatusCheck = true;
             UnlockText();
         }
@@ -70,11 +73,14 @@ public class UserDetailsActivity extends AppCompatActivity {
                 if (StatusCheck) {
                     LockText();
                     StatusCheck = false;
-                    //add db function
+                    Server.SERVER.Lock(username, "lock");
+                    Toast.makeText(UserDetailsActivity.this, "Account successfully locked.", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     UnlockText();
                     StatusCheck = true;
+                    Server.SERVER.Lock(username, "unlock");
+                    Toast.makeText(UserDetailsActivity.this, "Account successfully unlocked.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -85,14 +91,18 @@ public class UserDetailsActivity extends AppCompatActivity {
                 if (AdminCheck) {
                     GrantText();
                     AdminCheck = false;
+                    Server.SERVER.Lock(username, "revoke");
+                    Toast.makeText(UserDetailsActivity.this, "Access revoked.", Toast.LENGTH_SHORT).show();
+                    // set admin to 0
                 }
                 else {
                     RevokeText();
                     AdminCheck = true;
+                    Server.SERVER.Lock(username, "grant");
+                    Toast.makeText(UserDetailsActivity.this, "Access granted.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
 
         Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +110,6 @@ public class UserDetailsActivity extends AppCompatActivity {
                 startActivity(new Intent(UserDetailsActivity.this, UsersActivity.class));
             }
         });
-
 
     }
 
