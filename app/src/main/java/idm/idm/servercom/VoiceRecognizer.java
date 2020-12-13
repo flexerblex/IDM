@@ -48,7 +48,7 @@ public class VoiceRecognizer {
         }
     }
 
-    // used to register FaceID for the first time
+    // used to register VoiceID for the first time
     public boolean Upload(File path)
     {
         try {
@@ -102,7 +102,7 @@ public class VoiceRecognizer {
                             RequestBody.create(MediaType.parse("application/octet-stream"),
                                     new File(path.getPath())))
                     .addFormDataPart("username", Server.firstName) //will replace with user when endpoint is complete
-                    .addFormDataPart("type", "face")
+                    .addFormDataPart("type", "voice")
                     .addFormDataPart("method", "create")
                     .build();
             Request request = new Request.Builder()
@@ -124,7 +124,7 @@ public class VoiceRecognizer {
         }
     }
 
-    // used to login using FaceID
+    // used to login using VoiceID
     public boolean Authenticate(File path, String username)
     {
         AuthParams params = new AuthParams(path, username);
