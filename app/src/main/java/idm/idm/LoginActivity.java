@@ -210,6 +210,8 @@ public class LoginActivity extends AppCompatActivity  {
             counter--;
             Info.setText("ATTEMPTS REMAINING: " + String.valueOf(counter));
 
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
             if(counter == 0){
                try {
 
@@ -223,10 +225,14 @@ public class LoginActivity extends AppCompatActivity  {
                catch (JSONException e) {
                    e.printStackTrace();
                }
+               // lockTime = new Date();
+                //Server.SERVER.login(userName,userPass)){
 
+
+                //Login.setEnabled(false);
+                Info.setText("You've been locked out");
             }
-        }
-          /*  else if (counter < 0) {
+            else if (counter < 0) {
 
                 Date currentTime = new Date();
                 long remainingTime = currentTime.getTime() - lockTime.getTime();
@@ -238,7 +244,8 @@ public class LoginActivity extends AppCompatActivity  {
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
-                    }else{
+                    }
+                    else{
                         counter --;
                         Info.setText("ATTEMPTS REMAINING: " + String.valueOf(counter));
                     }
@@ -248,9 +255,9 @@ public class LoginActivity extends AppCompatActivity  {
                     Info.setText("You've been locked out");
                 }
             }
-*/
+
         }
-   //}
+   }
 
 
     @Override
