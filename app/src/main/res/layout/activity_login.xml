@@ -214,17 +214,16 @@
         android:id="@+id/appNameDetails"
         android:layout_width="378dp"
         android:layout_height="39dp"
-        android:layout_marginTop="7dp"
         android:fontFamily="@font/sarala"
         android:text="Identity Management System"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview1"
-        app:layout_constraintVertical_bias="0.01" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.189" />
 
     <TextView
         android:id="@+id/orText"
