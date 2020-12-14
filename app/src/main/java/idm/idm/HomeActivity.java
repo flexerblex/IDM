@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -25,7 +28,19 @@ import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.concurrent.Executor;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 
 import idm.idm.servercom.FaceRecognizer;
 import idm.idm.servercom.Server;
@@ -76,14 +91,36 @@ public class HomeActivity extends AppCompatActivity {
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
 
-                SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("username", Server.username);
-                editor.putString("password", Server.password);
-                editor.commit();
-                Toast.makeText(getApplicationContext(), "Fingerprint Successfully Registered.",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                try {
+                    KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+                    keyGenerator.init(new KeyGenParameterSpec.Builder("Key",
+                            KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                            .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                            .build());
+                    SecretKey secretKey = keyGenerator.generateKey();
+                    Cipher cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+                    cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+                        byte[] encryptionIv = cipher.getIV();
+                        byte[] passwordBytes = Server.password.getBytes("UTF-8");
+                        byte[] encryptedPasswordBytes = cipher.doFinal(passwordBytes);
+
+                    String encryptedPassword = Base64.encodeToString(encryptedPasswordBytes, Base64.DEFAULT);
+
+                    SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("username", Server.username);
+                    editor.putString("password", encryptedPassword);
+                    editor.putString("encryptionIv", Base64.encodeToString(encryptionIv, Base64.DEFAULT));
+                    editor.commit();
+                    Toast.makeText(getApplicationContext(), "Fingerprint Successfully Registered.",
+                            Toast.LENGTH_SHORT)
+                            .show();
+
+                } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | NoSuchPaddingException | InvalidKeyException | UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

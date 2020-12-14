@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.security.keystore.KeyProperties;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +25,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -52,6 +61,13 @@ import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
 import idm.idm.servercom.FaceRecognizer;
 import idm.idm.servercom.Server;
@@ -146,14 +162,30 @@ public class LoginActivity extends AppCompatActivity  {
                 super.onAuthenticationSucceeded(result);
                 SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
                 String username = prefs.getString("username","");
-                String pwd = prefs.getString("password","");
+                String encryptedPassword = prefs.getString("password","");
+                String encryptedIv = prefs.getString("encryptionIv", "");
+
+                    byte[] encryptionIv = Base64.decode(encryptedIv, Base64.DEFAULT);
+                    byte[] encryptedP = Base64.decode(encryptedPassword, Base64.DEFAULT);
+
                 if (username.equals("")) {
                     Toast.makeText(getApplicationContext(),
                             "Error: User has not set up Fingerprint yet", Toast.LENGTH_SHORT)
                             .show();
                 }
                 else {
-                    validID(username, pwd);
+                    try {
+                        KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+                        keyStore.load(null);
+                        SecretKey secretKey = (SecretKey) keyStore.getKey("Key", null);
+                        Cipher cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+                        cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(encryptionIv));
+                        byte[] passwordBytes = cipher.doFinal(encryptedP);
+                        String password = new String(passwordBytes, "UTF-8");
+                        validID(username, password);
+                    } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException | UnrecoverableKeyException | NoSuchPaddingException | InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
