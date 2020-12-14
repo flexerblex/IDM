@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,6 @@ public class UsersActivity extends AppCompatActivity {
 
     private final String ADDRESS = "http://3.128.46.46/";
     ArrayList<User> userList = new ArrayList<>();
-    ArrayList<User> userInformation = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +44,15 @@ public class UsersActivity extends AppCompatActivity {
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
-                Intent iReserver = new Intent(UsersActivity.this, HomeActivity.class);
-                startActivity(iReserver);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(UsersActivity.this, UserDetailsActivity.class);
+                intent.putExtra("name", userList.get(i).getUsername());
+                intent.putExtra("fname", userList.get(i).getFirstName());
+                intent.putExtra("lname", userList.get(i).getLastName());
+                intent.putExtra("email", userList.get(i).getEmail());
+                intent.putExtra("isAdmin", userList.get(i).getIsAdmin());
+                intent.putExtra("isLocked", userList.get(i).getIsLocked());
+                startActivity(intent);
             }
         });
 
@@ -123,18 +129,19 @@ public class UsersActivity extends AppCompatActivity {
 
     public void CompileUsers(JSONArray arr) throws JSONException {
 
+        System.out.println("compiling users....");
+
         for (int i = 0; i < arr.length(); i++) {
             String username = arr.getJSONObject(i).getString("username");
             String fname = arr.getJSONObject(i).getString("fname");
             String lname = arr.getJSONObject(i).getString("lname");
             String email = arr.getJSONObject(i).getString("email");
-            Integer isLocked = arr.getJSONObject(i).getInt("isLocked");
             Integer is_admin = arr.getJSONObject(i).getInt("is_admin");
+            Integer isLocked = arr.getJSONObject(i).getInt("isLocked");
 
-            User user = new User(fname, lname, username);
-            User information = new User(fname, lname, username, email, isLocked, is_admin);
+            User user = new User(fname, lname, username, email, is_admin, isLocked);
             userList.add(user);
-            userInformation.add(information);
+
         }
     }
 
