@@ -117,6 +117,9 @@ public class LoginActivity extends AppCompatActivity  {
                             "idm.idm.provider", imageFile);
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    intent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+                    intent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+                    intent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
                     startActivityForResult(intent,1);
 
                 } catch (IOException e) {
@@ -239,6 +242,7 @@ public class LoginActivity extends AppCompatActivity  {
             if (FaceRecognizer.FACERECOGNIZER.Authenticate(imageFile, username)) {
                 Intent toHome2 = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(toHome2);
+
             }
             else {
                 System.out.println("Error authenticating.");

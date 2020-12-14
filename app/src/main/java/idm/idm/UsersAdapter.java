@@ -61,20 +61,6 @@ public class UsersAdapter extends ArrayAdapter<User> {
             holder.firstName = (TextView) convertView.findViewById(R.id.firstName);
             holder.lastName = (TextView) convertView.findViewById(R.id.lastName);
 
-
-//            holder.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                    String nameText = (holder.name).getText().toString();
-//
-//                    Intent myIntent = new Intent(view.getContext(), HomeActivity.class);
-//                    myIntent.putExtra("otherName", nameText);
-//
-//                    mContext.startActivity(myIntent);
-//                }
-//            });
-
             convertView.setTag(holder);
         }
         else {

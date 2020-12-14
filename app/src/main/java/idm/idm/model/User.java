@@ -13,12 +13,6 @@ public class User {
     private Integer isAdmin;
     private Integer isLocked;
 
-    public User(String firstName, String lastName, String username) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-    }
-
     public User(String firstName, String lastName, String username, String email, Integer isAdmin, Integer isLocked) {
         this.firstName = firstName;
         this.lastName = lastName;

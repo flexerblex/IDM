@@ -129,16 +129,19 @@ public class UsersActivity extends AppCompatActivity {
 
     public void CompileUsers(JSONArray arr) throws JSONException {
 
+        System.out.println("compiling users....");
+
         for (int i = 0; i < arr.length(); i++) {
             String username = arr.getJSONObject(i).getString("username");
             String fname = arr.getJSONObject(i).getString("fname");
             String lname = arr.getJSONObject(i).getString("lname");
             String email = arr.getJSONObject(i).getString("email");
-            Integer isLocked = arr.getJSONObject(i).getInt("isLocked");
             Integer is_admin = arr.getJSONObject(i).getInt("is_admin");
+            Integer isLocked = arr.getJSONObject(i).getInt("isLocked");
 
-            User user = new User(fname, lname, username, email, isLocked, is_admin);
+            User user = new User(fname, lname, username, email, is_admin, isLocked);
             userList.add(user);
+
         }
     }
 

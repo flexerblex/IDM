@@ -35,7 +35,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         String lname = intent.getStringExtra("lname");
         String email = intent.getStringExtra("email");
         Integer isAdmin = intent.getIntExtra("isAdmin", 0);
-        final Integer isLocked = intent.getIntExtra("isLocked", 0);
+        Integer isLocked = intent.getIntExtra("isLocked", 0);
 
         Name = (TextView)findViewById(R.id.fullname);
         Username = (TextView)findViewById(R.id.username);
@@ -50,15 +50,20 @@ public class UserDetailsActivity extends AppCompatActivity {
         Username.setText(username);
         Email.setText(email);
 
-        if (isAdmin == 1) {
+        System.out.println("Account status: " +isLocked);
+        System.out.println("Admin status: " +isAdmin);
+
+        //if user is not an admin, display: user
+        if (isAdmin == 0) {
             AdminCheck = false;
             GrantText();
         }
+        //if user is an admin, display: admin
         else {
             AdminCheck = true;
             RevokeText();
         }
-        if (isLocked == 1) {
+        if (isLocked == 0) {
             StatusCheck = true;
             UnlockText();
         }
