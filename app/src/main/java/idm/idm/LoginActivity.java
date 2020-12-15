@@ -240,7 +240,7 @@ public class LoginActivity extends AppCompatActivity  {
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
             if (FaceRecognizer.FACERECOGNIZER.Authenticate(imageFile, username)) {
-                Intent toHome2 = new Intent(LoginActivity.this, Home2Activity.class);
+                Intent toHome2 = new Intent(LoginActivity.this, FeedActivity.class);
                 startActivity(toHome2);
 
             }
