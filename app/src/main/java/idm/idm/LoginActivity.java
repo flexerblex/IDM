@@ -212,7 +212,7 @@ public class LoginActivity extends AppCompatActivity  {
                 if (remainingTime > 12000) {
                     counter = 3;
                     if (Server.SERVER.login(userName,userPass)) {
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, Home2Activity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
@@ -240,7 +240,7 @@ public class LoginActivity extends AppCompatActivity  {
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
             if (FaceRecognizer.FACERECOGNIZER.Authenticate(imageFile, username)) {
-                Intent toHome2 = new Intent(LoginActivity.this, HomeActivity.class);
+                Intent toHome2 = new Intent(LoginActivity.this, Home2Activity.class);
                 startActivity(toHome2);
 
             }
