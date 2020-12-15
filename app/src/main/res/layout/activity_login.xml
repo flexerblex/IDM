@@ -151,8 +151,8 @@
 
     <TextView
         android:id="@+id/createAccount"
-        android:layout_width="209dp"
-        android:layout_height="24dp"
+        android:layout_width="316dp"
+        android:layout_height="28dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/sarala"
         android:text="Don't have an account? Sign Up"
@@ -166,8 +166,8 @@
 
     <TextView
         android:id="@+id/logInfo"
-        android:layout_width="123dp"
-        android:layout_height="17dp"
+        android:layout_width="236dp"
+        android:layout_height="13dp"
         android:layout_marginTop="9dp"
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/sarala"

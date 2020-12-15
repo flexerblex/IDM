@@ -220,8 +220,9 @@ public class FaceRecognizer {
             System.out.println(user);
 
             JSONObject jsonObject2 = new JSONObject(user);
-            name = jsonObject2.getString("fname");
-            System.out.println(name);
+            Server.firstName = jsonObject2.getString("fname");
+            Server.lastName = jsonObject2.getString("lname");
+            Server.email = jsonObject2.getString("email");
 
         }
         catch(Exception exc)
