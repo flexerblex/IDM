@@ -8,32 +8,6 @@
     tools:context="idm.idm.EditActivity">
 
 
-    <TextView
-        android:id="@+id/confirmPassword"
-        android:layout_width="99dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/sarala"
-        android:text="Confirm Password:"
-        android:textAlignment="viewStart"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
-
-    <EditText
-        android:id="@+id/ConfirmPassword"
-        android:layout_width="204dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/sarala"
-        android:inputType="textPassword"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.29"
-        app:layout_constraintStart_toEndOf="@+id/confirmPassword"
-        app:layout_constraintTop_toBottomOf="@+id/Password" />
-
     <Button
         android:id="@+id/cancel"
         style="@style/Widget.AppCompat.Button.Colored"
@@ -41,16 +15,16 @@
         android:layout_height="49dp"
         android:layout_gravity="start"
         android:layout_marginStart="73dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/rounded_btn"
         android:backgroundTint="#BCBCBC"
         android:enabled="true"
         android:fontFamily="@font/sarala"
         android:text="CANCEL"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/update"
-        app:layout_constraintTop_toBottomOf="@+id/ConfirmPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/Email" />
 
     <Button
         android:id="@+id/update"
@@ -58,15 +32,15 @@
         android:layout_width="124dp"
         android:layout_height="49dp"
         android:layout_gravity="start"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/rounded_btn"
         android:backgroundTint="#FF009688"
         android:enabled="true"
         android:fontFamily="@font/sarala"
         android:text="UPDATE"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ConfirmPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/Email" />
 
     <EditText
         android:id="@+id/FirstName"
@@ -148,32 +122,6 @@
         app:layout_constraintHorizontal_bias="0.29"
         app:layout_constraintStart_toEndOf="@+id/email"
         app:layout_constraintTop_toBottomOf="@+id/LastName" />
-
-    <EditText
-        android:id="@+id/Password"
-        android:layout_width="204dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/sarala"
-        android:inputType="textPassword"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.29"
-        app:layout_constraintStart_toEndOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/Email" />
-
-    <TextView
-        android:id="@+id/password"
-        android:layout_width="98dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="28dp"
-        android:fontFamily="@font/sarala"
-        android:text="Password:"
-        android:textAlignment="viewStart"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Email" />
 
     <TextView
         android:id="@+id/textview1"

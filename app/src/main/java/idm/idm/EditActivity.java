@@ -24,8 +24,6 @@ public class EditActivity extends AppCompatActivity {
     private EditText FirstName;
     private EditText LastName;
     private EditText Email;
-    private EditText Password;
-    private EditText ConfirmPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +37,6 @@ public class EditActivity extends AppCompatActivity {
         LastName.setText(Server.lastName, TextView.BufferType.EDITABLE);
         Email = (EditText)findViewById(R.id.Email);
         Email.setText(Server.email, TextView.BufferType.EDITABLE);
-        Password = (EditText)findViewById(R.id.Password);
-        Password.setText(Server.password, TextView.BufferType.EDITABLE);
-        ConfirmPassword = (EditText)findViewById(R.id.ConfirmPassword);
-        ConfirmPassword.setText(Server.password, TextView.BufferType.EDITABLE);
         Update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,32 +49,21 @@ public class EditActivity extends AppCompatActivity {
                 } if(TextUtils.isEmpty(Email.getText().toString())) {
                     Toast.makeText(EditActivity.this, "Email is required.", Toast.LENGTH_SHORT).show();
                     return;
-                } if(TextUtils.isEmpty(Password.getText().toString())) {
-                    Toast.makeText(EditActivity.this, "Password is required.", Toast.LENGTH_SHORT).show();
-                    return;
                 } else {
-                    if (Password.getText().toString().equals(ConfirmPassword.getText().toString())) {
                         JSONObject user = new JSONObject();
                         JSONObject userData = new JSONObject();
                         try {
                             user.put("id", Server.id);
                             userData.put("email", Email.getText().toString());
-                            userData.put("password", Password.getText().toString());
                             userData.put("fname", FirstName.getText().toString());
                             userData.put("lname", LastName.getText().toString());
                             user.put("user", userData);
 
                             System.out.println(user.toString());
 
-                            SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = prefs.edit();
-                            editor.putString("password", Password.getText().toString());
-                            editor.commit();
-
                             Server.firstName = FirstName.getText().toString();
                             Server.lastName = LastName.getText().toString();
                             Server.email = Email.getText().toString();
-                            Server.password = Password.getText().toString();
 
                             if (Server.SERVER.update(user)) {
                                 Toast.makeText(EditActivity.this, "Profile Updated Successfully.", Toast.LENGTH_SHORT).show();
@@ -89,14 +72,6 @@ public class EditActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    } else {
-                        Context context = getApplicationContext();
-                        CharSequence text = "Password Confirmation does not match.";
-                        int duration = Toast.LENGTH_SHORT;
-
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-                    }
                 }
             }
         });

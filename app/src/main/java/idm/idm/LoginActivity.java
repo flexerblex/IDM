@@ -74,6 +74,7 @@ import idm.idm.servercom.Server;
 
 public class LoginActivity extends AppCompatActivity  {
 
+    public static String password;
     private EditText Name;
     private EditText Password;
     private TextView Info;
@@ -114,8 +115,8 @@ public class LoginActivity extends AppCompatActivity  {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                password = Password.getText().toString();
                 validID(Name.getText().toString(), Password.getText().toString());
-
                 System.out.println("reached 1");
             }
         });

@@ -103,7 +103,7 @@ public class HomeActivity extends AppCompatActivity {
                     cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
                         byte[] encryptionIv = cipher.getIV();
-                        byte[] passwordBytes = Server.password.getBytes("UTF-8");
+                        byte[] passwordBytes = LoginActivity.password.getBytes("UTF-8");
                         byte[] encryptedPasswordBytes = cipher.doFinal(passwordBytes);
 
                     String encryptedPassword = Base64.encodeToString(encryptedPasswordBytes, Base64.DEFAULT);
