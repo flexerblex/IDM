@@ -50,7 +50,19 @@ public class FeedActivity extends AppCompatActivity {
 
         ListView mListView = (ListView) findViewById(R.id.listView);
 
-        feed("username");
+        System.out.println(Server.username);
+        if (Server.username.contains("liliasuau")) {
+            feed(getResources().getString(R.string.liliasuau));
+        }
+        else if (Server.username.contains("agamache")) {
+            feed(getResources().getString(R.string.agamache));
+        }
+        else if (Server.username.contains("lilia_capstone")) {
+            feed(getResources().getString(R.string.lilia_capstone));
+        }
+        else {
+            System.out.println("empty");
+        }
 
         FeedAdapter adapter = new FeedAdapter(this, R.layout.adapter_feed, feedList);
         mListView.setAdapter(adapter);
@@ -91,7 +103,7 @@ public class FeedActivity extends AppCompatActivity {
                     .build();
             Request request = new Request.Builder()
                     .url("https://graph.instagram.com/me/media?fields=username,media_url,caption,timestamp&access_token="+
-                            getResources().getString(R.string.liliasuau))
+                            username)
                     .method("GET", null)
                     .build();
             Response response = client.newCall(request).execute();
