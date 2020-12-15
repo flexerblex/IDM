@@ -31,6 +31,11 @@
                     android:text="Active Users"
                     android:textAlignment="center"
                     android:textSize="30sp" />
+                <ImageButton
+                    android:id="@+id/goBack"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/abc_vector_test" />
 
                 <ListView
                     android:id="@+id/listView"
@@ -39,7 +44,6 @@
                     android:cacheColorHint="@android:color/transparent"
                     android:clickable="true"
                     android:focusable="true" />
-
 
             </LinearLayout>
 

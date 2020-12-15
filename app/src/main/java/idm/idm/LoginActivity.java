@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity  {
     private void validID(String userName, String userPass) {
 
         if(counter > 0 && Server.SERVER.login(userName,userPass)) {
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            Intent intent = new Intent(LoginActivity.this, FeedActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }

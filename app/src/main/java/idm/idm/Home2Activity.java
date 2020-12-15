@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ import java.util.concurrent.Executor;
 import idm.idm.servercom.FaceRecognizer;
 import idm.idm.servercom.Server;
 
-public class HomeActivity extends AppCompatActivity {
+public class Home2Activity extends AppCompatActivity {
 
     private TextView Name;
     private Button Face;
@@ -38,6 +39,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button Logout;
     private Button ViewUsers;
     private Button EditProfile;
+    private ImageButton Home;
     private String currentPhotoPath;
     private File imageFile;
     private Executor executor;
@@ -47,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_home2);
 
         Name = (TextView)findViewById(R.id.personName);
         if (Server.firstName != null) {
@@ -59,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         executor = ContextCompat.getMainExecutor(this);
-        biometricPrompt = new BiometricPrompt(HomeActivity.this,
+        biometricPrompt = new BiometricPrompt(Home2Activity.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode,
@@ -105,6 +107,7 @@ public class HomeActivity extends AppCompatActivity {
         Logout = (Button)findViewById(R.id.logout);
         EditProfile = (Button)findViewById(R.id.editProfile);
         ViewUsers = (Button)findViewById(R.id.viewUsers);
+        Home = (ImageButton)findViewById(R.id.goBack);
 
         if (Server.isAdmin == 0){
             ViewUsers.setVisibility(View.GONE);
@@ -123,7 +126,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     Log.d("currentPhotoPath", currentPhotoPath);
 
-                    Uri imageUri = FileProvider.getUriForFile(HomeActivity.this,
+                    Uri imageUri = FileProvider.getUriForFile(Home2Activity.this,
                             "idm.idm.provider", imageFile);
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -150,7 +153,7 @@ public class HomeActivity extends AppCompatActivity {
         Voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, RecordAudioActivity.class));
+                startActivity(new Intent(Home2Activity.this, RecordAudioActivity.class));
             }
         });
 
@@ -158,15 +161,22 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Server.session_cookie = "";
-                Toast.makeText(HomeActivity.this, "Logout Successful", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                Toast.makeText(Home2Activity.this, "Logout Successful", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Home2Activity.this, LoginActivity.class));
             }
         });
 
         EditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, EditActivity.class));
+                startActivity(new Intent(Home2Activity.this, EditActivity.class));
+            }
+        });
+
+        Home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Home2Activity.this, FeedActivity.class));
             }
         });
 
@@ -174,7 +184,7 @@ public class HomeActivity extends AppCompatActivity {
             ViewUsers.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(HomeActivity.this, UsersActivity.class));
+                    startActivity(new Intent(Home2Activity.this, UsersActivity.class));
                 }
             });
         }
@@ -188,7 +198,7 @@ public class HomeActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK ) {
 
             if (FaceRecognizer.FACERECOGNIZER.Upload(imageFile)) {
-                Toast.makeText(HomeActivity.this, "Face registered successfully.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home2Activity.this, "Face registered successfully.", Toast.LENGTH_SHORT).show();
                 System.out.println("success");
             }
             else {
