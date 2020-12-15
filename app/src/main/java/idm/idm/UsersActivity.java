@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class UsersActivity extends AppCompatActivity {
 
     private final String ADDRESS = "http://3.128.46.46/";
     ArrayList<User> userList = new ArrayList<>();
+    private ImageButton Back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,15 @@ public class UsersActivity extends AppCompatActivity {
 
         UsersAdapter adapter = new UsersAdapter(this, R.layout.adapter_users, userList);
         mListView.setAdapter(adapter);
+
+        Back = (ImageButton)findViewById(R.id.goBack);
+
+        Back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(UsersActivity.this, FeedActivity.class));
+            }
+        });
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
