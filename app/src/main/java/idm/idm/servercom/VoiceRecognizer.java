@@ -1,28 +1,28 @@
 package idm.idm.servercom;
 
-        import android.os.AsyncTask;
-        import android.os.Build;
+import android.os.AsyncTask;
+import android.os.Build;
 
-        import androidx.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
-        import org.json.JSONException;
-        import org.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-        import java.io.BufferedReader;
-        import java.io.File;
-        import java.io.IOException;
-        import java.io.InputStreamReader;
-        import java.net.URL;
-        import java.net.URLConnection;
-        import java.util.Base64;
-        import java.util.concurrent.TimeUnit;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 
-        import okhttp3.MediaType;
-        import okhttp3.MultipartBody;
-        import okhttp3.OkHttpClient;
-        import okhttp3.Request;
-        import okhttp3.RequestBody;
-        import okhttp3.Response;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Lexy
@@ -48,7 +48,7 @@ public class VoiceRecognizer {
         }
     }
 
-    // used to register FaceID for the first time
+    // used to register VoiceID for the first time
     public boolean Upload(File path)
     {
         try {
@@ -102,7 +102,7 @@ public class VoiceRecognizer {
                             RequestBody.create(MediaType.parse("application/octet-stream"),
                                     new File(path.getPath())))
                     .addFormDataPart("username", Server.firstName) //will replace with user when endpoint is complete
-                    .addFormDataPart("type", "face")
+                    .addFormDataPart("type", "voice")
                     .addFormDataPart("method", "create")
                     .build();
             Request request = new Request.Builder()
@@ -124,7 +124,7 @@ public class VoiceRecognizer {
         }
     }
 
-    // used to login using FaceID
+    // used to login using VoiceID
     public boolean Authenticate(File path, String username)
     {
         AuthParams params = new AuthParams(path, username);

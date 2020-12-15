@@ -72,7 +72,7 @@
         app:layout_constraintVertical_bias="0.695" />
 
     <Button
-        android:id="@+id/voiceID"
+        android:id="@+id/loginButton2"
         style="@android:style/Widget.DeviceDefault.Light.Button"
         android:layout_width="331dp"
         android:layout_height="44dp"
