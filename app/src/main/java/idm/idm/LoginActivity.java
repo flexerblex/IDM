@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity  {
     private Button Login;
     private Button LoginFace;
     private Button LoginFingerprint;
+    private Button LoginVoice;
     private Executor executor;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
@@ -91,6 +92,7 @@ public class LoginActivity extends AppCompatActivity  {
         Login = (Button)findViewById(R.id.loginButton);
         LoginFace = (Button)findViewById((R.id.faceID));
         LoginFingerprint = (Button)findViewById(R.id.fingerprintID);
+        LoginVoice = (Button)findViewById(R.id.voiceID);
         Create = (TextView) findViewById(R.id.createAccount);
 
         //javaCameraView = (JavaCameraView)findViewById(R.id.javaCamView);
@@ -183,6 +185,14 @@ public class LoginActivity extends AppCompatActivity  {
             public void onClick(View view) {
                 Intent toRegister = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(toRegister);
+            }
+        });
+
+        LoginVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toRecording = new Intent(LoginActivity.this, RecordAudioActivity.class);
+                startActivity(toRecording);
             }
         });
 
