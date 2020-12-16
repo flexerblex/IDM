@@ -57,11 +57,8 @@ public class FeedActivity extends AppCompatActivity {
         else if (Server.username.contains("agamache")) {
             feed(getResources().getString(R.string.agamache));
         }
-        else if (Server.username.contains("lilia_capstone")) {
-            feed(getResources().getString(R.string.lilia_capstone));
-        }
         else {
-            System.out.println("empty");
+            feed(getResources().getString(R.string.idm_capstone));
         }
 
         FeedAdapter adapter = new FeedAdapter(this, R.layout.adapter_feed, feedList);
@@ -98,7 +95,6 @@ public class FeedActivity extends AppCompatActivity {
 
         try {
 
-            System.out.println("im not tripping");
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
             Request request = new Request.Builder()
